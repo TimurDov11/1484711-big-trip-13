@@ -7,8 +7,13 @@ import {createTripEventsListTemplate} from "./view/trip-events-list.js";
 import {createFormNewPointTemplate} from "./view/form-new-point.js";
 import {createFormEditPointTemplate} from "./view/form-edit-point.js";
 import {createTripEventsItemTemplate} from "./view/trip-events-item.js";
+import {generateWaypoint} from "./mock/waypoint.js";
 
-const EVENT_COUNT = 3;
+const EVENT_COUNT = 20;
+
+const waypoints = new Array(EVENT_COUNT).fill().map(generateWaypoint);
+
+console.log(waypoints);
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -41,5 +46,5 @@ render(tripEventsListElement, createFormNewPointTemplate(), `beforeend`);
 render(tripEventsListElement, createFormEditPointTemplate(), `beforeend`);
 
 for (let i = 0; i < EVENT_COUNT; i++) {
-  render(tripEventsListElement, createTripEventsItemTemplate(), `beforeend`);
+  render(tripEventsListElement, createTripEventsItemTemplate(waypoints[i]), `beforeend`);
 }
