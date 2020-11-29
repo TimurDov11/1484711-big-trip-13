@@ -13,8 +13,6 @@ const EVENT_COUNT = 20;
 
 const waypoints = new Array(EVENT_COUNT).fill().map(generateWaypoint);
 
-console.log(waypoints);
-
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };

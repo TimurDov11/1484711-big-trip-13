@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 const PRICE_MIN = 1;
 const PRICE_MAX = 200;
 
@@ -39,6 +41,19 @@ const generateDestinationPlace = () => {
   return DESTINATION_PLACES[randomIndex];
 };
 
+const generateStartTime = () => {
+  return dayjs().toDate();
+};
+
+const generateEndTime = () => {
+  const minMinutesGap = 30;
+  const maxMinutesGap = 600;
+
+  const MinutesGap = getRandomInteger(minMinutesGap, maxMinutesGap);
+
+  return dayjs().add(MinutesGap, `minute`).toDate();
+};
+
 const generateOffer = () => {
   const TITLES = [
     `Add luggage`,
@@ -50,7 +65,7 @@ const generateOffer = () => {
     type,
     title: false,
     price: false
-  }
+  };
 };
 
 const generateDescription = () => {
@@ -94,7 +109,7 @@ const generatePhotos = () => {
 
   for (let i = 1; i <= size; i++) {
     photos.push(`http://picsum.photos/248/152?r=${i}`);
-  };
+  }
 
   return photos;
 };
@@ -105,8 +120,8 @@ export const generateWaypoint = () => {
   return {
     type,
     destinationPlace: generateDestinationPlace(),
-    startTime: null,
-    endTime: null,
+    startTime: generateStartTime(),
+    endTime: generateEndTime(),
     price: getRandomInteger(PRICE_MIN, PRICE_MAX),
     offers: {
       type,
@@ -120,3 +135,5 @@ export const generateWaypoint = () => {
     isFavorite: Boolean(getRandomInteger(0, 1))
   };
 };
+
+console.log(generateWaypoint());
