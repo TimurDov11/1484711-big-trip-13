@@ -13,7 +13,12 @@ export const createTripEventsItemTemplate = (waypoint) => {
 
   const favoriteClassName = isFavorite
     ? `event__favorite-btn--active`
-    : ``
+    : ``;
+
+  //  const selectedOffersList = document.querySelector(`.event__selected-offers`);
+
+  //  console.log(selectedOffersList);
+  //  selectedOffersList.textContent = ``;
 
   return `<li class="trip-events__item">
       <div class="event">

@@ -57,15 +57,31 @@ const generateEndTime = () => {
 const generateOffer = () => {
   const TITLES = [
     `Add luggage`,
-    `Chamonix`,
-    `Geneva`
+    `Switch to comfort`,
+    `Add meal`,
+    `Choose seats`,
+    `Travel by train`,
+    `Order Uber`
   ];
 
-  return {
-    type,
-    title: false,
-    price: false
-  };
+  const OFFERS_NUMBER_MIN = 0;
+  const OFFERS_NUMBER_MAX = 5;
+
+  const offers = [];
+
+  let size = getRandomInteger(OFFERS_NUMBER_MIN, OFFERS_NUMBER_MAX);
+
+  for (let i = 0; i < size; i++) {
+    const randomIndex = getRandomInteger(0, TITLES.length - 1);
+
+    offers.push({
+      type: generateType(),
+      title: TITLES[randomIndex],
+      price: getRandomInteger(PRICE_MIN, PRICE_MAX)
+    });
+  }
+
+  return offers;
 };
 
 const generateDescription = () => {
@@ -116,6 +132,14 @@ const generatePhotos = () => {
 
 export const generateWaypoint = () => {
   const type = generateType();
+  const offers = generateOffer().filter((offer) => {
+    //  console.log(offer.type);
+    //  console.log(type);
+    return offer.type === type;
+  }).
+  map((offer) => {
+    return offer;
+  });
 
   return {
     type,
@@ -123,11 +147,7 @@ export const generateWaypoint = () => {
     startTime: generateStartTime(),
     endTime: generateEndTime(),
     price: getRandomInteger(PRICE_MIN, PRICE_MAX),
-    offers: {
-      type,
-      title: false,
-      price: false
-    },
+    offers,
     destinationDescription: {
       description: generateDescription(),
       photos: generatePhotos()
@@ -136,4 +156,4 @@ export const generateWaypoint = () => {
   };
 };
 
-console.log(generateWaypoint());
+//  console.log(generateWaypoint());
