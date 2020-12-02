@@ -43,7 +43,7 @@ render(tripEventsElement, createTripEventsListTemplate(), `beforeend`);
 const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
 
 render(tripEventsListElement, createFormNewPointTemplate(), `beforeend`);
-render(tripEventsListElement, createFormEditPointTemplate(), `beforeend`);
+render(tripEventsListElement, createFormEditPointTemplate(waypoints[0]), `beforeend`);
 
 for (let i = 0; i < EVENT_COUNT; i++) {
   render(tripEventsListElement, createTripEventsItemTemplate(waypoints[i]), `beforeend`);

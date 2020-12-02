@@ -9,7 +9,7 @@ export const createTripEventsItemTemplate = (waypoint) => {
   const startTimeMachinery = dayjs(startTime).format(`YYYY-MM-DDTHH:mm`);
   const endTimeHuman = dayjs(endTime).format(`HH:mm`);
   const endTimeMachinery = dayjs(endTime).format(`YYYY-MM-DDTHH:mm`);
-  const duration = dayjs(endTime).diff(dayjs(startTime));
+  const duration = dayjs(endTime).diff(dayjs(startTime), `minute`);
 
   const favoriteClassName = isFavorite
     ? `event__favorite-btn--active`
