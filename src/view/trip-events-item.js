@@ -1,7 +1,11 @@
 import dayjs from "dayjs";
+import duration from 'dayjs/plugin/duration';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(duration);
+dayjs.extend(utc);
 
 export const createTripEventsItemTemplate = (waypoint) => {
-  const {type, destinationPlace, startTime, endTime, price, isFavorite} = waypoint;
+  const {type, destinationPlace, startTime, endTime, price, offers, isFavorite} = waypoint;
 
   const startTimeDateHuman = dayjs(startTime).format(`MMM DD`);
   const startTimeDateMachinery = dayjs(startTime).format(`YYYY-MM-DD`);
@@ -9,16 +13,40 @@ export const createTripEventsItemTemplate = (waypoint) => {
   const startTimeMachinery = dayjs(startTime).format(`YYYY-MM-DDTHH:mm`);
   const endTimeHuman = dayjs(endTime).format(`HH:mm`);
   const endTimeMachinery = dayjs(endTime).format(`YYYY-MM-DDTHH:mm`);
-  const duration = dayjs(endTime).diff(dayjs(startTime), `minute`);
+
+  const difference = dayjs.duration(dayjs(endTime).diff(dayjs(startTime))).asMilliseconds();
+
+  const createDifference = () => {
+    if (difference < dayjs.duration(1, `hours`).asMilliseconds()) {
+      return dayjs(difference).utc().format(`mm[M]`);
+    } else if (difference < dayjs.duration(1, `days`).asMilliseconds()) {
+      return dayjs(difference).utc().format(`HH[H] mm[M]`);
+    } else {
+      return dayjs(difference).utc().format(`DD[D] HH[H] mm[M]`);
+    }
+  };
 
   const favoriteClassName = isFavorite
     ? `event__favorite-btn--active`
     : ``;
 
-  //  const selectedOffersList = document.querySelector(`.event__selected-offers`);
+  const createEventOfferTemplate = () => {
+    if (offers.length === 0) {
+      return ``;
+    } else {
+      const fragment = [];
 
-  //  console.log(selectedOffersList);
-  //  selectedOffersList.textContent = ``;
+      for (let i = 0; i < offers.length; i++) {
+        fragment.push(`<li class="event__offer">
+            <span class="event__offer-title">${offers[i].title}</span>
+            &plus;&euro;&nbsp;
+            <span class="event__offer-price">${offers[i].price}</span>
+          </li>`);
+      }
+
+      return fragment.join(``);
+    }
+  };
 
   return `<li class="trip-events__item">
       <div class="event">
@@ -33,18 +61,14 @@ export const createTripEventsItemTemplate = (waypoint) => {
             &mdash;
             <time class="event__end-time" datetime="${endTimeMachinery}">${endTimeHuman}</time>
           </p>
-          <p class="event__duration">${duration}M</p>
+          <p class="event__duration">${createDifference()}</p>
         </div>
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${price}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          <li class="event__offer">
-            <span class="event__offer-title">Order Uber</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">20</span>
-          </li>
+          ${createEventOfferTemplate()}
         </ul>
         <button class="event__favorite-btn ${favoriteClassName}" type="button">
           <span class="visually-hidden">Add to favorite</span>

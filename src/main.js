@@ -22,11 +22,11 @@ const render = (container, template, place) => {
 const pageBodyElement = document.querySelector(`.page-body`);
 const tripMainElement = pageBodyElement.querySelector(`.trip-main`);
 
-render(tripMainElement, createTripInfoTemplate(), `afterbegin`);
+render(tripMainElement, createTripInfoTemplate(waypoints), `afterbegin`);
 
 const tripInfoElement = tripMainElement.querySelector(`.trip-info`);
 
-render(tripInfoElement, createTripInfoCostTemplate(), `beforeend`);
+render(tripInfoElement, createTripInfoCostTemplate(waypoints), `beforeend`);
 
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 
@@ -42,9 +42,9 @@ render(tripEventsElement, createTripEventsListTemplate(), `beforeend`);
 
 const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
 
-render(tripEventsListElement, createFormNewPointTemplate(), `beforeend`);
+render(tripEventsListElement, createFormNewPointTemplate(waypoints[0]), `beforeend`);
 render(tripEventsListElement, createFormEditPointTemplate(waypoints[0]), `beforeend`);
 
-for (let i = 0; i < EVENT_COUNT; i++) {
+for (let i = 1; i < EVENT_COUNT; i++) {
   render(tripEventsListElement, createTripEventsItemTemplate(waypoints[i]), `beforeend`);
 }

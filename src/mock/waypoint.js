@@ -33,7 +33,8 @@ const generateDestinationPlace = () => {
   const DESTINATION_PLACES = [
     `Amsterdam`,
     `Chamonix`,
-    `Geneva`
+    `Geneva`,
+    `Surgut`
   ];
 
   const randomIndex = getRandomInteger(0, DESTINATION_PLACES.length - 1);
@@ -47,14 +48,14 @@ const generateStartTime = () => {
 
 const generateEndTime = () => {
   const minMinutesGap = 30;
-  const maxMinutesGap = 600;
+  const maxMinutesGap = 6000;
 
   const MinutesGap = getRandomInteger(minMinutesGap, maxMinutesGap);
 
   return dayjs().add(MinutesGap, `minute`).toDate();
 };
 
-const generateOffer = () => {
+const generateOffers = () => {
   const TITLES = [
     `Add luggage`,
     `Switch to comfort`,
@@ -132,7 +133,7 @@ const generatePhotos = () => {
 
 export const generateWaypoint = () => {
   const type = generateType();
-  const offers = generateOffer().filter((offer) => {
+  const offers = generateOffers().filter((offer) => {
     //  console.log(offer.type);
     //  console.log(type);
     return offer.type === type;
