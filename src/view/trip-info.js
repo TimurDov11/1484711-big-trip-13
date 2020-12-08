@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 
 export const createTripInfoTemplate = (waypoints) => {
-  const createDestinationPlaces = waypoints.map(function (waypoint) {
+  const createDestinationPlaces = waypoints.map((waypoint) => {
     return waypoint.destinationPlace;
   });
 
