@@ -7,8 +7,13 @@ import {createTripEventsListTemplate} from "./view/trip-events-list.js";
 import {createFormNewPointTemplate} from "./view/form-new-point.js";
 import {createFormEditPointTemplate} from "./view/form-edit-point.js";
 import {createTripEventsItemTemplate} from "./view/trip-events-item.js";
+import {generateWaypoint} from "./mock/waypoint.js";
 
-const EVENT_COUNT = 3;
+const EVENT_COUNT = 20;
+
+const waypoints = new Array(EVENT_COUNT).fill().map(generateWaypoint);
+
+//  console.log(waypoints);
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -17,11 +22,11 @@ const render = (container, template, place) => {
 const pageBodyElement = document.querySelector(`.page-body`);
 const tripMainElement = pageBodyElement.querySelector(`.trip-main`);
 
-render(tripMainElement, createTripInfoTemplate(), `afterbegin`);
+render(tripMainElement, createTripInfoTemplate(waypoints), `afterbegin`);
 
 const tripInfoElement = tripMainElement.querySelector(`.trip-info`);
 
-render(tripInfoElement, createTripInfoCostTemplate(), `beforeend`);
+render(tripInfoElement, createTripInfoCostTemplate(waypoints), `beforeend`);
 
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 
@@ -37,9 +42,9 @@ render(tripEventsElement, createTripEventsListTemplate(), `beforeend`);
 
 const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
 
-render(tripEventsListElement, createFormNewPointTemplate(), `beforeend`);
-render(tripEventsListElement, createFormEditPointTemplate(), `beforeend`);
+render(tripEventsListElement, createFormNewPointTemplate(waypoints[0]), `beforeend`);
+render(tripEventsListElement, createFormEditPointTemplate(waypoints[0]), `beforeend`);
 
-for (let i = 0; i < EVENT_COUNT; i++) {
-  render(tripEventsListElement, createTripEventsItemTemplate(), `beforeend`);
+for (let i = 1; i < EVENT_COUNT; i++) {
+  render(tripEventsListElement, createTripEventsItemTemplate(waypoints[i]), `beforeend`);
 }
