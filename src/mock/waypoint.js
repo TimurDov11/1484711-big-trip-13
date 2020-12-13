@@ -108,7 +108,7 @@ const generateDescription = () => {
   let size = getRandomInteger(DESCRIPTIONS_NUMBER_MIN, DESCRIPTIONS_NUMBER_MAX);
 
   for (let i = 1; i <= size; i++) {
-    const index = getRandomInteger(0, temp.length);
+    const index = getRandomInteger(0, temp.length - 1);
     descriptions.push(temp[index]);
     temp.splice(index, 1);
   }
