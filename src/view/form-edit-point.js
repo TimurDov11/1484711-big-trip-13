@@ -1,6 +1,7 @@
+import {createElement} from "../utils.js";
 import dayjs from "dayjs";
 
-export const createFormEditPointTemplate = (waypoint) => {
+const createFormEditPointTemplate = (waypoint) => {
   const {type, destinationPlace, startTime, endTime, price, offers, destinationDescription} = waypoint;
 
   const startTimeDateTimeHuman = dayjs(startTime).format(`DD/MM/YY HH:mm`);
@@ -195,3 +196,26 @@ export const createFormEditPointTemplate = (waypoint) => {
       </form>
     </li>`;
 };
+
+export default class FormEditPoint {
+  constructor(waypoint) {
+    this._waypoint = waypoint;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFormEditPointTemplate(this._waypoint);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,4 +1,6 @@
-export const createTripInfoCostTemplate = (waypoints) => {
+import {createElement} from "../utils.js";
+
+const createTripInfoCostTemplate = (waypoints) => {
   const createOffers = waypoints.map((waypoint) => {
     return waypoint.offers;
   });
@@ -21,3 +23,26 @@ export const createTripInfoCostTemplate = (waypoints) => {
       Total: &euro;&nbsp;<span class="trip-info__cost-value">${calculateTotalPrice}</span>
     </p>`;
 };
+
+export default class TripInfoCost {
+  constructor(waypoints) {
+    this._waypoints = waypoints;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripInfoCostTemplate(this._waypoints);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

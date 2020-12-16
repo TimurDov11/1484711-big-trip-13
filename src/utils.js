@@ -1,12 +1,10 @@
-import dayjs from "dayjs";
-
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
   AFTEREND: `afterend`
 };
 
-export const renderElement = (container, element, place) => {
+export const render = (container, element, place) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);
