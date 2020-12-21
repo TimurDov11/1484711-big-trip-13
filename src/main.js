@@ -1,50 +1,69 @@
-import {createTripInfoTemplate} from "./view/trip-info.js";
-import {createTripInfoCostTemplate} from "./view/trip-info-cost.js";
-import {createTripMenuTemplate} from "./view/trip-menu.js";
-import {createTripFilterTemplate} from "./view/trip-filter.js";
-import {createTripSortTemplate} from "./view/trip-sort.js";
-import {createTripEventsListTemplate} from "./view/trip-events-list.js";
-import {createFormNewPointTemplate} from "./view/form-new-point.js";
-import {createFormEditPointTemplate} from "./view/form-edit-point.js";
-import {createTripEventsItemTemplate} from "./view/trip-events-item.js";
+import TripInfoView from "./view/trip-info.js";
+import TripInfoCostView from "./view/trip-info-cost.js";
+import SiteMenuView from "./view/trip-menu.js";
+import TripFilterView from "./view/trip-filter.js";
+import TripSortView from "./view/trip-sort.js";
+import TripEventsListView from "./view/trip-events-list.js";
+//  import FormNewPointView from "./view/form-new-point.js";
+import FormEditPointView from "./view/form-edit-point.js";
+import TripEventsItemView from "./view/trip-events-item.js";
 import {generateWaypoint} from "./mock/waypoint.js";
+import {render, RenderPosition} from "./utils.js";
 
 const EVENT_COUNT = 20;
 
 const waypoints = new Array(EVENT_COUNT).fill().map(generateWaypoint);
 
-//  console.log(waypoints);
+const renderEventPoint = (tripListElement, waypoint) => {
+  const waypointComponent = new TripEventsItemView(waypoint);
+  const waypointEditComponent = new FormEditPointView(waypoint);
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
+  const replaceEventPointToForm = () => {
+    tripListElement.replaceChild(waypointEditComponent.getElement(), waypointComponent.getElement());
+  };
+
+  const replaceFormToEventPoint = () => {
+    tripListElement.replaceChild(waypointComponent.getElement(), waypointEditComponent.getElement());
+  };
+
+  waypointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+    replaceEventPointToForm();
+  });
+
+  waypointEditComponent.getElement().querySelector(`form`).addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    replaceFormToEventPoint();
+  });
+
+  render(tripListElement, waypointComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
 const pageBodyElement = document.querySelector(`.page-body`);
 const tripMainElement = pageBodyElement.querySelector(`.trip-main`);
 
-render(tripMainElement, createTripInfoTemplate(waypoints), `afterbegin`);
+render(tripMainElement, new TripInfoView(waypoints).getElement(), RenderPosition.AFTERBEGIN);
 
 const tripInfoElement = tripMainElement.querySelector(`.trip-info`);
 
-render(tripInfoElement, createTripInfoCostTemplate(waypoints), `beforeend`);
+render(tripInfoElement, new TripInfoCostView(waypoints).getElement(), RenderPosition.BEFOREEND);
 
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 
 const switchTripViewElement = tripControlsElement.querySelector(`h2`);
 
-render(switchTripViewElement, createTripMenuTemplate(), `afterend`);
-render(tripControlsElement, createTripFilterTemplate(), `beforeend`);
+render(switchTripViewElement, new SiteMenuView().getElement(), RenderPosition.AFTER);
+
+render(tripControlsElement, new TripFilterView().getElement(), RenderPosition.BEFOREEND);
 
 const tripEventsElement = pageBodyElement.querySelector(`.trip-events`);
 
-render(tripEventsElement, createTripSortTemplate(), `beforeend`);
-render(tripEventsElement, createTripEventsListTemplate(), `beforeend`);
+render(tripEventsElement, new TripSortView().getElement(), RenderPosition.BEFOREEND);
+render(tripEventsElement, new TripEventsListView().getElement(), RenderPosition.BEFOREEND);
 
 const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
 
-render(tripEventsListElement, createFormNewPointTemplate(waypoints[0]), `beforeend`);
-render(tripEventsListElement, createFormEditPointTemplate(waypoints[0]), `beforeend`);
+//  render(tripEventsListElement, new FormNewPointView(waypoints[0]).getElement(), RenderPosition.BEFOREEND);
 
-for (let i = 1; i < EVENT_COUNT; i++) {
-  render(tripEventsListElement, createTripEventsItemTemplate(waypoints[i]), `beforeend`);
+for (let i = 0; i < EVENT_COUNT; i++) {
+  renderEventPoint(tripEventsListElement, waypoints[i]);
 }

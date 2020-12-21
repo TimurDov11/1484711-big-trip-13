@@ -1,14 +1,8 @@
 import dayjs from "dayjs";
+import {getRandomInteger} from "../utils.js";
 
 const PRICE_MIN = 1;
 const PRICE_MAX = 200;
-
-const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
 
 const generateType = () => {
   const TYPES = [
@@ -108,7 +102,7 @@ const generateDescription = () => {
   let size = getRandomInteger(DESCRIPTIONS_NUMBER_MIN, DESCRIPTIONS_NUMBER_MAX);
 
   for (let i = 1; i <= size; i++) {
-    const index = getRandomInteger(0, temp.length);
+    const index = getRandomInteger(0, temp.length - 1);
     descriptions.push(temp[index]);
     temp.splice(index, 1);
   }

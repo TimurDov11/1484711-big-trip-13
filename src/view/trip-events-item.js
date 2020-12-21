@@ -1,10 +1,11 @@
+import {createElement} from "../utils.js";
 import dayjs from "dayjs";
 import duration from 'dayjs/plugin/duration';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(duration);
 dayjs.extend(utc);
 
-export const createTripEventsItemTemplate = (waypoint) => {
+const createTripEventsItemTemplate = (waypoint) => {
   const {type, destinationPlace, startTime, endTime, price, offers, isFavorite} = waypoint;
 
   const startTimeDateHuman = dayjs(startTime).format(`MMM DD`);
@@ -82,3 +83,26 @@ export const createTripEventsItemTemplate = (waypoint) => {
       </div>
     </li>`;
 };
+
+export default class TripEventsItem {
+  constructor(waypoint) {
+    this._waypoint = waypoint;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripEventsItemTemplate(this._waypoint);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
