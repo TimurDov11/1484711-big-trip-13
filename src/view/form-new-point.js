@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 import dayjs from "dayjs";
 
 const createFormNewPointTemplate = (waypoint) => {
@@ -194,25 +194,13 @@ const createFormNewPointTemplate = (waypoint) => {
     </li>`;
 };
 
-export default class FormNewPoint {
+export default class FormNewPoint extends AbstractView {
   constructor(waypoint) {
+    super();
     this._waypoint = waypoint;
-    this._element = null;
   }
 
   getTemplate() {
     return createFormNewPointTemplate(this._waypoint);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 import dayjs from "dayjs";
 import duration from 'dayjs/plugin/duration';
 import utc from 'dayjs/plugin/utc';
@@ -84,25 +84,13 @@ const createTripEventsItemTemplate = (waypoint) => {
     </li>`;
 };
 
-export default class TripEventsItem {
+export default class TripEventsItem extends AbstractView {
   constructor(waypoint) {
+    super();
     this._waypoint = waypoint;
-    this._element = null;
   }
 
   getTemplate() {
     return createTripEventsItemTemplate(this._waypoint);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
