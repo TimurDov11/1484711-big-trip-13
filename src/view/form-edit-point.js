@@ -201,9 +201,36 @@ export default class FormEditPoint extends AbstractView {
   constructor(waypoint) {
     super();
     this._waypoint = waypoint;
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   getTemplate() {
     return createFormEditPointTemplate(this._waypoint);
+  }
+
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector(`form`).addEventListener(`submit`, this._formSubmitHandler);
+  }
+
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
+  }
+
+  removeEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, this._editClickHandler);
   }
 }

@@ -32,8 +32,8 @@ const renderEventPoint = (tripListElement, waypoint) => {
       evt.preventDefault();
 
       replaceFormToEventPoint();
-      waypointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, onEventRollupBtnDownClick);
-      waypointEditComponent.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, onEventRollupBtnUpClick);
+      waypointComponent.setEditClickHandler(onEventRollupBtnDownClick);
+      waypointEditComponent.removeEditClickHandler(onEventRollupBtnUpClick);
       document.removeEventListener(`keydown`, onEscKeyDown);
     }
   };
@@ -41,25 +41,24 @@ const renderEventPoint = (tripListElement, waypoint) => {
   const onEventRollupBtnDownClick = () =>{
     replaceEventPointToForm();
     document.addEventListener(`keydown`, onEscKeyDown);
-    waypointEditComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, onEventRollupBtnUpClick);
-    waypointComponent.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, onEventRollupBtnDownClick);
+    waypointEditComponent.setEditClickHandler(onEventRollupBtnUpClick);
+    waypointComponent.removeEditClickHandler(onEventRollupBtnDownClick);
   };
 
   const onEventRollupBtnUpClick = () =>{
     replaceFormToEventPoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
-    waypointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, onEventRollupBtnDownClick);
-    waypointEditComponent.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, onEventRollupBtnUpClick);
+    waypointComponent.setEditClickHandler(onEventRollupBtnDownClick);
+    waypointEditComponent.removeEditClickHandler(onEventRollupBtnUpClick);
   };
 
-  waypointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, onEventRollupBtnDownClick);
+  waypointComponent.setEditClickHandler(onEventRollupBtnDownClick);
 
-  waypointEditComponent.getElement().querySelector(`form`).addEventListener(`submit`, (evt) => {
-    evt.preventDefault();
+  waypointEditComponent.setFormSubmitHandler(() => {
     replaceFormToEventPoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
-    waypointEditComponent.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, onEventRollupBtnUpClick);
-    waypointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, onEventRollupBtnDownClick);
+    waypointEditComponent.removeEditClickHandler(onEventRollupBtnUpClick);
+    waypointComponent.setEditClickHandler(onEventRollupBtnDownClick);
   });
 
   render(tripListElement, waypointComponent.getElement(), RenderPosition.BEFOREEND);

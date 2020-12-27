@@ -88,9 +88,25 @@ export default class TripEventsItem extends AbstractView {
   constructor(waypoint) {
     super();
     this._waypoint = waypoint;
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   getTemplate() {
     return createTripEventsItemTemplate(this._waypoint);
+  }
+
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
+  }
+
+  removeEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, this._editClickHandler);
   }
 }
