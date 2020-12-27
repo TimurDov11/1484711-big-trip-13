@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {getRandomInteger} from "../utils.js";
+import {getRandomInteger} from "../utils/common.js";
 
 const PRICE_MIN = 1;
 const PRICE_MAX = 200;
@@ -150,5 +150,3 @@ export const generateWaypoint = () => {
     isFavorite: Boolean(getRandomInteger(0, 1))
   };
 };
-
-//  console.log(generateWaypoint());
