@@ -9,7 +9,7 @@ import NoTripEventsItemView from "./view/no-trip-events-item.js";
 import FormEditPointView from "./view/form-edit-point.js";
 import TripEventsItemView from "./view/trip-events-item.js";
 import {generateWaypoint} from "./mock/waypoint.js";
-import {render, RenderPosition} from "./utils.js";
+import {render, RenderPosition, replace, remove} from "./utils/render.js";
 
 const EVENT_COUNT = 20;
 
@@ -20,11 +20,11 @@ const renderEventPoint = (tripListElement, waypoint) => {
   const waypointEditComponent = new FormEditPointView(waypoint);
 
   const replaceEventPointToForm = () => {
-    tripListElement.replaceChild(waypointEditComponent.getElement(), waypointComponent.getElement());
+    replace(waypointEditComponent.getElement(), waypointComponent.getElement());
   };
 
   const replaceFormToEventPoint = () => {
-    tripListElement.replaceChild(waypointComponent.getElement(), waypointEditComponent.getElement());
+    replace(waypointComponent.getElement(), waypointEditComponent.getElement());
   };
 
   const onEscKeyDown = (evt) => {
@@ -32,8 +32,8 @@ const renderEventPoint = (tripListElement, waypoint) => {
       evt.preventDefault();
 
       replaceFormToEventPoint();
-      waypointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, onEventRollupBtnDownClick);
-      waypointEditComponent.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, onEventRollupBtnUpClick);
+      waypointComponent.setEditClickHandler(onEventRollupBtnDownClick);
+      waypointEditComponent.removeEditClickHandler(onEventRollupBtnUpClick);
       document.removeEventListener(`keydown`, onEscKeyDown);
     }
   };
@@ -41,28 +41,27 @@ const renderEventPoint = (tripListElement, waypoint) => {
   const onEventRollupBtnDownClick = () =>{
     replaceEventPointToForm();
     document.addEventListener(`keydown`, onEscKeyDown);
-    waypointEditComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, onEventRollupBtnUpClick);
-    waypointComponent.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, onEventRollupBtnDownClick);
+    waypointEditComponent.setEditClickHandler(onEventRollupBtnUpClick);
+    waypointComponent.removeEditClickHandler(onEventRollupBtnDownClick);
   };
 
   const onEventRollupBtnUpClick = () =>{
     replaceFormToEventPoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
-    waypointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, onEventRollupBtnDownClick);
-    waypointEditComponent.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, onEventRollupBtnUpClick);
+    waypointComponent.setEditClickHandler(onEventRollupBtnDownClick);
+    waypointEditComponent.removeEditClickHandler(onEventRollupBtnUpClick);
   };
 
-  waypointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, onEventRollupBtnDownClick);
+  waypointComponent.setEditClickHandler(onEventRollupBtnDownClick);
 
-  waypointEditComponent.getElement().querySelector(`form`).addEventListener(`submit`, (evt) => {
-    evt.preventDefault();
+  waypointEditComponent.setFormSubmitHandler(() => {
     replaceFormToEventPoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
-    waypointEditComponent.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, onEventRollupBtnUpClick);
-    waypointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, onEventRollupBtnDownClick);
+    waypointEditComponent.removeEditClickHandler(onEventRollupBtnUpClick);
+    waypointComponent.setEditClickHandler(onEventRollupBtnDownClick);
   });
 
-  render(tripListElement, waypointComponent.getElement(), RenderPosition.BEFOREEND);
+  render(tripListElement, waypointComponent, RenderPosition.BEFOREEND);
 };
 
 const pageBodyElement = document.querySelector(`.page-body`);
@@ -70,33 +69,31 @@ const tripMainElement = pageBodyElement.querySelector(`.trip-main`);
 
 const TripInfoComponent = new TripInfoView(waypoints);
 
-render(tripMainElement, TripInfoComponent.getElement(), RenderPosition.AFTERBEGIN);
+render(tripMainElement, TripInfoComponent, RenderPosition.AFTERBEGIN);
 
 const tripInfoElement = tripMainElement.querySelector(`.trip-info`);
 
 const TripInfoCostComponent = new TripInfoCostView(waypoints);
 
-render(tripInfoElement, TripInfoCostComponent.getElement(), RenderPosition.BEFOREEND);
+render(tripInfoElement, TripInfoCostComponent, RenderPosition.BEFOREEND);
 
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 
 const switchTripViewElement = tripControlsElement.querySelector(`h2`);
 
-render(switchTripViewElement, new SiteMenuView().getElement(), RenderPosition.AFTER);
+render(switchTripViewElement, new SiteMenuView(), RenderPosition.AFTER);
 
-render(tripControlsElement, new TripFilterView().getElement(), RenderPosition.BEFOREEND);
+render(tripControlsElement, new TripFilterView(), RenderPosition.BEFOREEND);
 
 const tripEventsElement = pageBodyElement.querySelector(`.trip-events`);
 
 if (waypoints.length === 0) {
-  TripInfoComponent.getElement().remove();
-  TripInfoComponent.removeElement();
-  TripInfoCostComponent.getElement().remove();
-  TripInfoCostComponent.removeElement();
-  render(tripEventsElement, new NoTripEventsItemView().getElement(), RenderPosition.BEFOREEND);
+  remove(TripInfoComponent);
+  remove(TripInfoCostComponent);
+  render(tripEventsElement, new NoTripEventsItemView(), RenderPosition.BEFOREEND);
 } else {
-  render(tripEventsElement, new TripSortView().getElement(), RenderPosition.BEFOREEND);
-  render(tripEventsElement, new TripEventsListView().getElement(), RenderPosition.BEFOREEND);
+  render(tripEventsElement, new TripSortView(), RenderPosition.BEFOREEND);
+  render(tripEventsElement, new TripEventsListView(), RenderPosition.BEFOREEND);
 }
 
 const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
