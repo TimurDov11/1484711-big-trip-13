@@ -1,30 +1,32 @@
-import TripInfoView from "./view/trip-info.js";
-import TripInfoCostView from "./view/trip-info-cost.js";
-import SiteMenuView from "./view/trip-menu.js";
+//  import TripInfoView from "./view/trip-info.js";
+//  import TripInfoCostView from "./view/trip-info-cost.js";
+import TripMenuView from "./view/trip-menu.js";
 import TripFilterView from "./view/trip-filter.js";
-import TripSortView from "./view/trip-sort.js";
-import TripEventsListView from "./view/trip-events-list.js";
-import NoTripEventsItemView from "./view/no-trip-events-item.js";
+//  import TripSortView from "./view/trip-sort.js";
+//  import TripEventsListView from "./view/trip-events-list.js";
+//  import NoTripEventsItemView from "./view/no-trip-events-item.js";
 //  import FormNewPointView from "./view/form-new-point.js";
-import FormEditPointView from "./view/form-edit-point.js";
-import TripEventsItemView from "./view/trip-events-item.js";
+//  import FormEditPointView from "./view/form-edit-point.js";
+//  import TripEventsItemView from "./view/trip-events-item.js";
 import {generateWaypoint} from "./mock/waypoint.js";
-import {render, RenderPosition, replace, remove} from "./utils/render.js";
+//  import {render, RenderPosition, replace, remove} from "./utils/render.js";
+import {render, RenderPosition, EVENT_COUNT, pageBodyElement, tripMainElement} from "./utils/render.js";
+import TripPresenter from "./presenter/Trip.js";
 
-const EVENT_COUNT = 20;
+//  const EVENT_COUNT = 20;
 
 const waypoints = new Array(EVENT_COUNT).fill().map(generateWaypoint);
 
-const renderEventPoint = (tripListElement, waypoint) => {
+/*const renderEventPoint = (tripListElement, waypoint) => {
   const waypointComponent = new TripEventsItemView(waypoint);
   const waypointEditComponent = new FormEditPointView(waypoint);
 
   const replaceEventPointToForm = () => {
-    replace(waypointEditComponent.getElement(), waypointComponent.getElement());
+    replace(waypointEditComponent, waypointComponent);
   };
 
   const replaceFormToEventPoint = () => {
-    replace(waypointComponent.getElement(), waypointEditComponent.getElement());
+    replace(waypointComponent, waypointEditComponent);
   };
 
   const onEscKeyDown = (evt) => {
@@ -62,44 +64,49 @@ const renderEventPoint = (tripListElement, waypoint) => {
   });
 
   render(tripListElement, waypointComponent, RenderPosition.BEFOREEND);
-};
+};*/
 
-const pageBodyElement = document.querySelector(`.page-body`);
-const tripMainElement = pageBodyElement.querySelector(`.trip-main`);
+//  const pageBodyElement = document.querySelector(`.page-body`);
+//  const tripMainElement = pageBodyElement.querySelector(`.trip-main`);
 
-const TripInfoComponent = new TripInfoView(waypoints);
+//  const TripInfoComponent = new TripInfoView(waypoints);
 
-render(tripMainElement, TripInfoComponent, RenderPosition.AFTERBEGIN);
+//  render(tripMainElement, TripInfoComponent, RenderPosition.AFTERBEGIN);
 
-const tripInfoElement = tripMainElement.querySelector(`.trip-info`);
+//  const tripInfoElement = tripMainElement.querySelector(`.trip-info`);
 
-const TripInfoCostComponent = new TripInfoCostView(waypoints);
+//  const TripInfoCostComponent = new TripInfoCostView(waypoints);
 
-render(tripInfoElement, TripInfoCostComponent, RenderPosition.BEFOREEND);
+//  render(TripInfoComponent, TripInfoCostComponent, RenderPosition.BEFOREEND);
 
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 
 const switchTripViewElement = tripControlsElement.querySelector(`h2`);
 
-render(switchTripViewElement, new SiteMenuView(), RenderPosition.AFTER);
+render(switchTripViewElement, new TripMenuView(), RenderPosition.AFTER);
 
 render(tripControlsElement, new TripFilterView(), RenderPosition.BEFOREEND);
 
-const tripEventsElement = pageBodyElement.querySelector(`.trip-events`);
+//  const tripEventsElement = pageBodyElement.querySelector(`.trip-events`);
+//  const TripEventsListComponent = new TripEventsListView();
 
-if (waypoints.length === 0) {
+/*if (waypoints.length === 0) {
   remove(TripInfoComponent);
   remove(TripInfoCostComponent);
   render(tripEventsElement, new NoTripEventsItemView(), RenderPosition.BEFOREEND);
 } else {
   render(tripEventsElement, new TripSortView(), RenderPosition.BEFOREEND);
-  render(tripEventsElement, new TripEventsListView(), RenderPosition.BEFOREEND);
-}
+  render(tripEventsElement, TripEventsListComponent, RenderPosition.BEFOREEND);
+}*/
 
-const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
+//const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
 
 //  render(tripEventsListElement, new FormNewPointView(waypoints[0]).getElement(), RenderPosition.BEFOREEND);
 
-for (let i = 0; i < Math.min(waypoints.length, EVENT_COUNT); i++) {
-  renderEventPoint(tripEventsListElement, waypoints[i]);
-}
+/*for (let i = 0; i < Math.min(waypoints.length, EVENT_COUNT); i++) {
+  renderEventPoint(TripEventsListComponent, waypoints[i]);
+}*/
+
+const tripPresenter = new TripPresenter(tripMainElement, waypoints);
+
+tripPresenter.init(waypoints);
