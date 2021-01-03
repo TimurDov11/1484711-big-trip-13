@@ -1,7 +1,7 @@
 import TripMenuView from "./view/trip-menu.js";
 import TripFilterView from "./view/trip-filter.js";
 import {generateWaypoint} from "./mock/waypoint.js";
-import {render, RenderPosition, EVENT_COUNT, pageBodyElement, tripMainElement} from "./utils/render.js";
+import {render, RenderPosition, EVENT_COUNT, tripMainElement} from "./utils/render.js";
 import TripPresenter from "./presenter/Trip.js";
 
 const waypoints = new Array(EVENT_COUNT).fill().map(generateWaypoint);
