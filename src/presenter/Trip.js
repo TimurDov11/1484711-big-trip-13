@@ -9,6 +9,7 @@ import PointPresenter from "./Point.js";
 export default class Trip {
   constructor(tripContainer, tripPoints) {
     this._tripContainer = tripContainer;
+    this._pointPresenter = {};
 
     this._tripInfoComponent = new TripInfoView(tripPoints);
     this._tripInfoCostComponent = new TripInfoCostView(tripPoints);
@@ -30,6 +31,14 @@ export default class Trip {
     const pointPresenter = new PointPresenter(this._tripEventsListComponent);
 
     pointPresenter.init(waypoint);
+    this._pointPresenter[waypoint.id] = pointPresenter;
+  }
+
+  _clearEventPoints() {
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._pointPresenter = {};
   }
 
   _renderEventPoints() {
