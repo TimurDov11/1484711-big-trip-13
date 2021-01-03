@@ -1,6 +1,6 @@
 import TripEventsItemView from "../view/trip-events-item.js";
 import FormEditPointView from "../view/form-edit-point.js";
-import {render, RenderPosition, replace} from "../utils/render.js";
+import {render, RenderPosition, replace, remove} from "../utils/render.js";
 
 export default class Point {
   constructor(tripEventsListContainer) {
@@ -18,13 +18,35 @@ export default class Point {
   init(waypoint) {
     this._waypoint = waypoint;
 
+    const prevWaypointComponent = this._waypointComponent;
+    const prevWaypointEditComponent = this._waypointEditComponent;
+
     this._waypointComponent = new TripEventsItemView(waypoint);
     this._waypointEditComponent = new FormEditPointView(waypoint);
 
     this._waypointComponent.setEditClickHandler(this._onEventRollupBtnDownClick);
     this._waypointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
 
-    render(this._tripEventsListContainer, this._waypointComponent, RenderPosition.BEFOREEND);
+    if (prevWaypointComponent === null || prevWaypointEditComponent === null) {
+      render(this._tripEventsListContainer, this._waypointComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+
+    if (this._tripEventsListContainer.getElement().contains(prevWaypointComponent.getElement())) {
+      replace(this._waypointComponent, prevWaypointComponent);
+    }
+
+    if (this._tripEventsListContainer.getElement().contains(prevWaypointEditComponent.getElement())) {
+      replace(this._waypointEditComponent, prevWaypointEditComponent);
+    }
+
+    remove(prevWaypointComponent);
+    remove(prevWaypointEditComponent);
+  }
+
+  destroy() {
+    remove(this._waypointComponent);
+    remove(this._waypointEditComponent);
   }
 
   _replaceEventPointToForm() {
