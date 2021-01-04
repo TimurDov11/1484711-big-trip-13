@@ -36,7 +36,7 @@ export default class Trip {
   }
 
   _renderEventPoint(waypoint) {
-    const pointPresenter = new PointPresenter(this._tripEventsListComponent);
+    const pointPresenter = new PointPresenter(this._tripEventsListComponent, this._handlePointChange);
 
     pointPresenter.init(waypoint);
     this._pointPresenter[waypoint.id] = pointPresenter;

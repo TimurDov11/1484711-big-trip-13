@@ -3,14 +3,16 @@ import FormEditPointView from "../view/form-edit-point.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 
 export default class Point {
-  constructor(tripEventsListContainer) {
+  constructor(tripEventsListContainer, changeData) {
     this._tripEventsListContainer = tripEventsListContainer;
+    this._changeData = changeData;
 
     this._waypointComponent = null;
     this._waypointEditComponent = null;
 
     this._onEventRollupBtnDownClick = this._onEventRollupBtnDownClick.bind(this);
     this._onEventRollupBtnUpClick = this._onEventRollupBtnUpClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
@@ -25,6 +27,7 @@ export default class Point {
     this._waypointEditComponent = new FormEditPointView(waypoint);
 
     this._waypointComponent.setEditClickHandler(this._onEventRollupBtnDownClick);
+    this._waypointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._waypointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
 
     if (prevWaypointComponent === null || prevWaypointEditComponent === null) {
@@ -87,7 +90,20 @@ export default class Point {
     this._waypointEditComponent.removeEditClickHandler(this._onEventRollupBtnUpClick);
   }
 
-  _handleFormSubmit() {
+  _handleFavoriteClick() {
+    this._changeData(
+        Object.assign(
+            {},
+            this._waypoint,
+            {
+              isFavorite: !this._waypoint.isFavorite
+            }
+        )
+    );
+  }
+
+  _handleFormSubmit(waypoint) {
+    this._changeData(waypoint);
     this._replaceFormToEventPoint();
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._waypointEditComponent.removeEditClickHandler(this._onEventRollupBtnUpClick);
