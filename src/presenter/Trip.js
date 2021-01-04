@@ -19,6 +19,7 @@ export default class Trip {
     this._tripEventsListComponent = new TripEventsListView();
 
     this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   init(tripPoints) {
@@ -30,13 +31,19 @@ export default class Trip {
     this._renderTrip();
   }
 
+  _handleModeChange() {
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => presenter.resetView());
+  }
+
   _handlePointChange(updatedPoint) {
     this._tripPoints = updateItem(this._tripPoints, updatedPoint);
     this._pointPresenter[updatedPoint.id].init(updatedPoint);
   }
 
   _renderEventPoint(waypoint) {
-    const pointPresenter = new PointPresenter(this._tripEventsListComponent, this._handlePointChange);
+    const pointPresenter = new PointPresenter(this._tripEventsListComponent, this._handlePointChange, this._handleModeChange);
 
     pointPresenter.init(waypoint);
     this._pointPresenter[waypoint.id] = pointPresenter;
