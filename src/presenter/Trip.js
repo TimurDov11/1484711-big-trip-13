@@ -4,6 +4,7 @@ import TripSortView from "../view/trip-sort.js";
 import TripEventsListView from "../view/trip-events-list.js";
 import NoTripEventsItemView from "../view/no-trip-events-item.js";
 import {render, RenderPosition, remove, EVENT_COUNT, tripEventsElement} from "../utils/render.js";
+import {updateItem} from "../utils/common.js";
 import PointPresenter from "./Point.js";
 
 export default class Trip {
@@ -16,6 +17,8 @@ export default class Trip {
     this._noTripEventsItemComponent = new NoTripEventsItemView();
     this._tripSortComponent = new TripSortView();
     this._tripEventsListComponent = new TripEventsListView();
+
+    this._handlePointChange = this._handlePointChange.bind(this);
   }
 
   init(tripPoints) {
@@ -25,6 +28,11 @@ export default class Trip {
     render(this._tripInfoComponent, this._tripInfoCostComponent, RenderPosition.BEFOREEND);
 
     this._renderTrip();
+  }
+
+  _handlePointChange(updatedPoint) {
+    this._tripPoints = updateItem(this._tripPoints, updatedPoint);
+    this._pointPresenter[updatedPoint.id].init(updatedPoint);
   }
 
   _renderEventPoint(waypoint) {
