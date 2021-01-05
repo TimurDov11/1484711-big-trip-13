@@ -3,7 +3,8 @@ import TripInfoCostView from "../view/trip-info-cost.js";
 import TripSortView from "../view/trip-sort.js";
 import TripEventsListView from "../view/trip-events-list.js";
 import NoTripEventsItemView from "../view/no-trip-events-item.js";
-import {render, RenderPosition, remove, EVENT_COUNT, tripEventsElement} from "../utils/render.js";
+import {render, RenderPosition, remove} from "../utils/render.js";
+import {EVENT_COUNT, tripEventsElement} from "../const.js";
 import {updateItem} from "../utils/common.js";
 import PointPresenter from "./Point.js";
 
