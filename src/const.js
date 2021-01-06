@@ -7,7 +7,7 @@ export const tripMainElement = pageBodyElement.querySelector(`.trip-main`);
 export const tripEventsElement = pageBodyElement.querySelector(`.trip-events`);
 
 export const SortType = {
-  DAY: `day`,
+  DEFAULT: `default`,
   TIME: `time`,
   PRICE: `price`
 };

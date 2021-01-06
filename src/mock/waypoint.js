@@ -39,12 +39,17 @@ const generateDestinationPlace = () => {
 };
 
 const generateStartTime = () => {
-  return dayjs().toDate();
+  const minMinutesGap = 30;
+  const maxMinutesGap = 6000;
+
+  const MinutesGap = getRandomInteger(minMinutesGap, maxMinutesGap);
+
+  return dayjs().add(MinutesGap, `minute`).toDate();
 };
 
 const generateEndTime = () => {
-  const minMinutesGap = 30;
-  const maxMinutesGap = 6000;
+  const minMinutesGap = 7000;
+  const maxMinutesGap = 16000;
 
   const MinutesGap = getRandomInteger(minMinutesGap, maxMinutesGap);
 
