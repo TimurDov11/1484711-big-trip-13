@@ -209,6 +209,20 @@ export default class FormEditPoint extends AbstractView {
     return createFormEditPointTemplate(this._waypoint);
   }
 
+  updateData(update) {
+    if (!update) {
+      return;
+    }
+
+    this._data = Object.assign(
+        {},
+        this._data,
+        update
+    );
+
+    this.updateElement();
+  }
+
   updateElement() {
     let prevElement = this.getElement();
     const parent = prevElement.parentElement;
