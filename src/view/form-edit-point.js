@@ -203,10 +203,27 @@ export default class FormEditPoint extends SmartView {
     this._waypoint = waypoint;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
+    this._typeToggleHandler = this.__typeToggleHandler.bind(this);
+
+    this.getElement()
+      .querySelector(`.event__type-group`)
+      .addEventListener(`click`, this._typeToggleHandler);
   }
 
   getTemplate() {
     return createFormEditPointTemplate(this._waypoint);
+  }
+
+  restoreHandlers() {
+    //  this._setInnerHandlers();
+    //  this.setFormSubmitHandler(this._callback.formSubmit);
+  }
+
+  _typeToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      type: !this._waypoint.type
+    });
   }
 
   _formSubmitHandler(evt) {

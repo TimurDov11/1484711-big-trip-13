@@ -3,7 +3,7 @@ import Abstract from "./abstract";
 export default class Smart extends Abstract {
   constructor() {
     super();
-    this._data = {};
+    this._waypoint = {};
   }
 
   updateData(update, justDataUpdating) {
@@ -11,9 +11,9 @@ export default class Smart extends Abstract {
       return;
     }
 
-    this._data = Object.assign(
+    this._waypoint = Object.assign(
         {},
-        this._data,
+        this._waypoint,
         update
     );
 
