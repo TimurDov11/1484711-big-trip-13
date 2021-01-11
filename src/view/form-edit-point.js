@@ -1,4 +1,4 @@
-import AbstractView from "./abstract.js";
+import SmartView from "./smart.js";
 import dayjs from "dayjs";
 
 const createFormEditPointTemplate = (waypoint) => {
@@ -197,7 +197,7 @@ const createFormEditPointTemplate = (waypoint) => {
     </li>`;
 };
 
-export default class FormEditPoint extends AbstractView {
+export default class FormEditPoint extends SmartView {
   constructor(waypoint) {
     super();
     this._waypoint = waypoint;
@@ -211,7 +211,7 @@ export default class FormEditPoint extends AbstractView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(this._waypoint);
   }
 
   setFormSubmitHandler(callback) {

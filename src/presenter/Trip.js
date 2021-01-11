@@ -1,61 +1,119 @@
-import TripInfoView from "./view/trip-info.js";
-import TripInfoCostView from "./view/trip-info-cost.js";
-import SiteMenuView from "./view/trip-menu.js";
-import TripFilterView from "./view/trip-filter.js";
-import TripSortView from "./view/trip-sort.js";
-import TripEventsListView from "./view/trip-events-list.js";
-import NoTripEventsItemView from "./view/no-trip-events-item.js";
+import TripInfoView from "../view/trip-info.js";
+import TripInfoCostView from "../view/trip-info-cost.js";
+import TripSortView from "../view/trip-sort.js";
+import TripEventsListView from "../view/trip-events-list.js";
+import NoTripEventsItemView from "../view/no-trip-events-item.js";
+import {render, RenderPosition, remove} from "../utils/render.js";
+import {EVENT_COUNT, tripEventsElement} from "../const.js";
+import {updateItem} from "../utils/common.js";
+import PointPresenter from "./Point.js";
+import {sortEventPointDay, sortEventPointPrice, sortEventPointTime} from "../utils/event-point.js";
+import {SortType} from "../const.js";
 
 export default class Trip {
-  constructor(tripContainer) {
+  constructor(tripContainer, tripPoints) {
     this._tripContainer = tripContainer;
+    this._pointPresenter = {};
+    this._currentSortType = SortType.DEFAULT;
 
-    this._tripInfoComponent = new TripInfoView();
-    this._tripInfoCostComponent = new TripInfoCostView();
-    this._siteMenuComponent = new SiteMenuView();
-    this._tripFilterComponent = new TripFilterView();
+    this._tripInfoComponent = new TripInfoView(tripPoints);
+    this._tripInfoCostComponent = new TripInfoCostView(tripPoints);
     this._noTripEventsItemComponent = new NoTripEventsItemView();
     this._tripSortComponent = new TripSortView();
     this._tripEventsListComponent = new TripEventsListView();
+
+    this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(tripPoints) {
-    this.tripPoints = tripPoints.slice();
-    // Метод для инициализации (начала работы) модуля,
-    // малая часть текущей функции renderBoard в main.js
+    this._tripPoints = tripPoints.slice().sort(sortEventPointDay);
+    this._sourcedTripPoints = tripPoints.slice().sort(sortEventPointDay);
+
+    render(this._tripContainer, this._tripInfoComponent, RenderPosition.AFTERBEGIN);
+    render(this._tripInfoComponent, this._tripInfoCostComponent, RenderPosition.BEFOREEND);
+
+    this._renderTrip();
   }
 
-  _renderTripInfo() {
-    // Метод для рендеринга
+  _handleModeChange() {
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => presenter.resetView());
   }
 
-  _renderTripInfoCost() {
-    // Метод для рендеринга
+  _handlePointChange(updatedPoint) {
+    this._tripPoints = updateItem(this._tripPoints, updatedPoint);
+    this._pointPresenter[updatedPoint.id].init(updatedPoint);
   }
 
-  _renderSiteMenu() {
-    // Метод для рендеринга
+  _renderEventPoint(waypoint) {
+    const pointPresenter = new PointPresenter(this._tripEventsListComponent, this._handlePointChange, this._handleModeChange);
+
+    pointPresenter.init(waypoint);
+    this._pointPresenter[waypoint.id] = pointPresenter;
   }
 
-  _renderTripFilter() {
-    // Метод для рендеринга
+  _sortEventPoints(sortType) {
+    switch (sortType) {
+      case SortType.TIME:
+        this._tripPoints.sort(sortEventPointTime);
+        break;
+      case SortType.PRICE:
+        this._tripPoints.sort(sortEventPointPrice);
+        break;
+      default:
+        this._tripPoints = this._sourcedTripPoints.slice();
+    }
+
+    this._currentSortType = sortType;
   }
 
-  _renderEventPoint() {
-    // Метод, куда уйдёт логика созданию и рендерингу компонетов задачи,
-    // текущая функция renderTask в main.js
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._sortEventPoints(sortType);
+
+    this._clearEventPoints();
+
+    render(tripEventsElement, this._tripEventsListComponent, RenderPosition.BEFOREEND);
+    this._renderEventPoints();
+  }
+
+  _renderSort() {
+    render(tripEventsElement, this._tripSortComponent, RenderPosition.BEFOREEND);
+    this._tripSortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+  }
+
+  _clearEventPoints() {
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._pointPresenter = {};
   }
 
   _renderEventPoints() {
-    // Метод для рендеринга N-задач за раз
+    for (let i = 0; i < Math.min(this._tripPoints.length, EVENT_COUNT); i++) {
+      this._renderEventPoint(this._tripPoints[i]);
+    }
   }
 
   _renderNoEventPoints() {
-    // Метод для рендеринга заглушки
+    render(tripEventsElement, this._noTripEventsItemComponent, RenderPosition.BEFOREEND);
   }
 
   _renderTrip() {
-    // Метод для инициализации (начала работы) модуля,
-    // бОльшая часть текущей функции renderBoard в main.js
+    if (this._tripPoints.length === 0) {
+      remove(this._tripInfoComponent);
+      remove(this._tripInfoCostComponent);
+      this._renderNoEventPoints();
+    } else {
+      this._renderSort();
+      render(tripEventsElement, this._tripEventsListComponent, RenderPosition.BEFOREEND);
+      this._renderEventPoints();
+    }
   }
 }

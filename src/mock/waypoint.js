@@ -4,6 +4,8 @@ import {getRandomInteger} from "../utils/common.js";
 const PRICE_MIN = 1;
 const PRICE_MAX = 200;
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 const generateType = () => {
   const TYPES = [
     `Taxi`,
@@ -37,12 +39,17 @@ const generateDestinationPlace = () => {
 };
 
 const generateStartTime = () => {
-  return dayjs().toDate();
+  const minMinutesGap = 30;
+  const maxMinutesGap = 6000;
+
+  const MinutesGap = getRandomInteger(minMinutesGap, maxMinutesGap);
+
+  return dayjs().add(MinutesGap, `minute`).toDate();
 };
 
 const generateEndTime = () => {
-  const minMinutesGap = 30;
-  const maxMinutesGap = 6000;
+  const minMinutesGap = 7000;
+  const maxMinutesGap = 16000;
 
   const MinutesGap = getRandomInteger(minMinutesGap, maxMinutesGap);
 
@@ -128,8 +135,6 @@ const generatePhotos = () => {
 export const generateWaypoint = () => {
   const type = generateType();
   const offers = generateOffers().filter((offer) => {
-    //  console.log(offer.type);
-    //  console.log(type);
     return offer.type === type;
   }).
   map((offer) => {
@@ -137,6 +142,7 @@ export const generateWaypoint = () => {
   });
 
   return {
+    id: generateId(),
     type,
     destinationPlace: generateDestinationPlace(),
     startTime: generateStartTime(),
