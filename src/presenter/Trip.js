@@ -23,7 +23,7 @@ export default class Trip {
     this._tripEventsListComponent = new TripEventsListView();
 
     this._handlePointChange = this._handlePointChange.bind(this);
-    this._handleModeChange = this._handleModeChange.bind(this);
+    //this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
@@ -37,11 +37,11 @@ export default class Trip {
     this._renderTrip();
   }
 
-  _handleModeChange() {
+  /*_handleModeChange() {
     Object
       .values(this._pointPresenter)
       .forEach((presenter) => presenter.resetView());
-  }
+  }*/
 
   _handlePointChange(updatedPoint) {
     this._tripPoints = updateItem(this._tripPoints, updatedPoint);

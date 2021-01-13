@@ -1,5 +1,6 @@
 import SmartView from "./smart.js";
 import dayjs from "dayjs";
+import {generateDescription, generatePhotos} from "../utils/render.js";
 
 const createFormEditPointTemplate = (waypoint) => {
   const {type, destinationPlace, startTime, endTime, price, offers, destinationDescription} = waypoint;
@@ -204,10 +205,20 @@ export default class FormEditPoint extends SmartView {
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._typeToggleHandler = this._typeToggleHandler.bind(this);
+    this._destinationPlaceToggleHandler = this._destinationPlaceToggleHandler.bind(this);
+    this._eventPriceInputHandler = this._eventPriceInputHandler.bind(this);
 
     this.getElement()
       .querySelector(`.event__type-group`)
       .addEventListener(`click`, this._typeToggleHandler);
+    this.getElement()
+      .querySelector(`#event-destination-1`)
+      .addEventListener(`change`, this._destinationPlaceToggleHandler);
+    this.getElement()
+      .querySelector(`.event__input--price`)
+      .addEventListener(`input`, this._eventPriceInputHandler);
+
+    this._setInnerHandlers();
   }
 
   getTemplate() {
@@ -215,15 +226,46 @@ export default class FormEditPoint extends SmartView {
   }
 
   restoreHandlers() {
-    //  this._setInnerHandlers();
-    //  this.setFormSubmitHandler(this._callback.formSubmit);
+    this._setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setEditClickHandler(this._callback.editClick);
+  }
+
+  _setInnerHandlers() {
+    this.getElement()
+      .querySelector(`.event__type-group`)
+      .addEventListener(`click`, this._typeToggleHandler);
+    this.getElement()
+      .querySelector(`#event-destination-1`)
+      .addEventListener(`change`, this._destinationPlaceToggleHandler);
+    this.getElement()
+      .querySelector(`.event__input--price`)
+      .addEventListener(`input`, this._eventPriceInputHandler);
   }
 
   _typeToggleHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      type: !this._waypoint.type
+      type: evt.target.innerText
     });
+  }
+
+  _destinationPlaceToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      destinationPlace: evt.target.value,
+      destinationDescription: {
+        description: generateDescription(),
+        photos: generatePhotos()
+      }
+    });
+  }
+
+  _eventPriceInputHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      price: evt.target.value
+    }, true);
   }
 
   _formSubmitHandler(evt) {

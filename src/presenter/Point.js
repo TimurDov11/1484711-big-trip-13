@@ -11,7 +11,7 @@ export default class Point {
   constructor(tripEventsListContainer, changeData, changeMode) {
     this._tripEventsListContainer = tripEventsListContainer;
     this._changeData = changeData;
-    this._changeMode = changeMode;
+    //this._changeMode = changeMode;
 
     this._waypointComponent = null;
     this._waypointEditComponent = null;
@@ -59,15 +59,15 @@ export default class Point {
     remove(this._waypointEditComponent);
   }
 
-  resetView() {
+  /*resetView() {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceFormToEventPoint();
     }
-  }
+  }*/
 
   _replaceEventPointToForm() {
     replace(this._waypointEditComponent, this._waypointComponent);
-    this._changeMode();
+    //this._changeMode();
     this._mode = Mode.EDITING;
   }
 
@@ -82,6 +82,7 @@ export default class Point {
   _onEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
+      //this._waypointComponent.reset(this._waypoint);
 
       this._replaceFormToEventPoint();
       this._waypointComponent.setEditClickHandler(this._onEventRollupBtnDownClick);
