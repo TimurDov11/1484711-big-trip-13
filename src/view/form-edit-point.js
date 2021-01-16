@@ -215,13 +215,20 @@ export default class FormEditPoint extends SmartView {
   constructor(waypoint) {
     super();
     this._data = FormEditPoint.parseWaypointToData(waypoint);
+    this._startDatepicker = null;
+    this._endDatepicker = null;
+
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._typeToggleHandler = this._typeToggleHandler.bind(this);
     this._destinationPlaceToggleHandler = this._destinationPlaceToggleHandler.bind(this);
     this._eventPriceInputHandler = this._eventPriceInputHandler.bind(this);
+    this._startTimeChangeHandler = this._startTimeChangeHandler.bind(this);
+    this._endTimeChangeHandler = this._endTimeChangeHandler.bind(this);
 
     this._setInnerHandlers();
+    this._setStartDatepicker();
+    this._setEndDatepicker();
   }
 
   reset(waypoint) {
@@ -236,8 +243,49 @@ export default class FormEditPoint extends SmartView {
 
   restoreHandlers() {
     this._setInnerHandlers();
+    this._setStartDatepicker();
+    this._setEndDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setEditClickHandler(this._callback.editClick);
+  }
+
+  _setStartDatepicker() {
+    if (this._startDatepicker) {
+      this._startDatepicker.destroy();
+      this._startDatepicker = null;
+    }
+
+
+    this._startDatepicker = flatpickr(
+        this.getElement().querySelector(`#event-start-time-1`),
+        {
+          enableTime: true,
+          dateFormat: `d/m/y H:i`,
+          //  time_24hr: true,
+          defaultDate: this._data.startTime,
+          onChange: this._startTimeChangeHandler
+        }
+    );
+  }
+
+  _setEndDatepicker() {
+    if (this._endDatepicker) {
+      this._endDatepicker.destroy();
+      this._endDatepicker = null;
+    }
+
+
+    this._endDatepicker = flatpickr(
+        this.getElement().querySelector(`#event-end-time-1`),
+        {
+          enableTime: true,
+          dateFormat: `d/m/y H:i`,
+          //  time_24hr: true,
+          defaultDate: this._data.endTime,
+          minDate: this._data.startTime,
+          onChange: this._endTimeChangeHandler
+        }
+    );
   }
 
   _setInnerHandlers() {
@@ -274,6 +322,20 @@ export default class FormEditPoint extends SmartView {
     evt.preventDefault();
     this.updateData({
       price: evt.target.value
+    }, true);
+  }
+
+  _startTimeChangeHandler([userDate]) {
+    this.updateData({
+      startTime: dayjs(userDate).format(`DD/MM/YY HH:mm`)
+      //  startTime: dayjs(userDate).hour(23).minute(59).second(59).toDate()
+      //  dayjs(startTime).format(`DD/MM/YY HH:mm`)
+    }, true);
+  }
+
+  _endTimeChangeHandler([userDate]) {
+    this.updateData({
+      endTime: dayjs(userDate).toDate()
     }, true);
   }
 
