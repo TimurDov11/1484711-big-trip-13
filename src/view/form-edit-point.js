@@ -1,6 +1,9 @@
 import SmartView from "./smart.js";
 import dayjs from "dayjs";
 import {generateDescription, generatePhotos} from "../utils/render.js";
+import flatpickr from "flatpickr";
+
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const createEventOfferTemplate = (offers, isOffers) => {
   if (isOffers) {
