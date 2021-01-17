@@ -11,7 +11,8 @@ import {sortEventPointDay, sortEventPointPrice, sortEventPointTime} from "../uti
 import {SortType} from "../const.js";
 
 export default class Trip {
-  constructor(tripContainer, tripPoints) {
+  constructor(tripContainer, tripPoints, pointsModel) {
+    this._pointsModel = pointsModel;
     this._tripContainer = tripContainer;
     this._pointPresenter = {};
     this._currentSortType = SortType.DEFAULT;
@@ -35,6 +36,10 @@ export default class Trip {
     render(this._tripInfoComponent, this._tripInfoCostComponent, RenderPosition.BEFOREEND);
 
     this._renderTrip();
+  }
+
+  _getTasks() {
+    return this._pointsModel.getTasks();
   }
 
   _handleModeChange() {
