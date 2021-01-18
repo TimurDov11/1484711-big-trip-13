@@ -1,0 +1,98 @@
+[33mcommit 44dfb6354f9ca43f1133b1cea44546d4ae50b2f1[m[33m ([m[1;36mHEAD -> [m[1;32mmodule2-task1[m[33m, [m[1;31morigin/module2-task1[m[33m)[m
+Author: TimurDov11 <65161688+TimurDov11@users.noreply.github.com>
+Date:   Sat Dec 5 23:19:59 2020 +0500
+
+    Выполняет задание
+
+[33mcommit 5d15461a24de23d29d319f9f4f2ddc8498eaed23[m
+Author: TimurDov11 <65161688+TimurDov11@users.noreply.github.com>
+Date:   Wed Dec 2 21:47:00 2020 +0500
+
+    Начинает переписывать функцию по созданию шаблона формы редактирования точки маршрута
+
+[33mcommit 15c714f44e364c5384a282029f8ab303353787b6[m
+Author: TimurDov11 <65161688+TimurDov11@users.noreply.github.com>
+Date:   Wed Dec 2 00:56:46 2020 +0500
+
+    Добавляет функцию генерации опций
+
+[33mcommit 2c0e12d47806ff35715a90edaed1e1fda898f2e7[m
+Author: TimurDov11 <65161688+TimurDov11@users.noreply.github.com>
+Date:   Tue Dec 1 00:00:20 2020 +0500
+
+    Начинает переписывать функцию по созданию шаблона точки маршрута
+
+[33mcommit d4d86b5d9659a832cb926b2f8d2807589aa51c04[m
+Author: TimurDov11 <65161688+TimurDov11@users.noreply.github.com>
+Date:   Sun Nov 29 23:13:44 2020 +0500
+
+    Добавляет функции генерации времени
+
+[33mcommit 4ed509c6082c4c11f7f763423c6e010052d731e8[m
+Author: TimurDov11 <65161688+TimurDov11@users.noreply.github.com>
+Date:   Sun Nov 29 22:27:03 2020 +0500
+
+    Начинает выполнять задание
+
+[33mcommit 79461ea3a0e1530b75cfb9b97614289c285355d0[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31macademy/master[m[33m, [m[1;32mmaster[m[33m)[m
+Author: Keks <keks@htmlacademy.ru>
+Date:   Thu Nov 26 10:33:18 2020 +0300
+
+    :cat:
+
+[33mcommit b42085a4b82b7b6278371d1f75e6bd4656cd56b0[m
+Merge: e4a9754 e14277f
+Author: Keks <keksobot@users.noreply.github.com>
+Date:   Wed Nov 25 09:51:45 2020 +0300
+
+    Merge pull request #3 from TimurDov11/module1-task3
+
+[33mcommit e14277f7e999a4b78560ac8dbb7717626afe7d0b[m[33m ([m[1;31morigin/module1-task3[m[33m, [m[1;32mmodule1-task3[m[33m)[m
+Author: TimurDov11 <65161688+TimurDov11@users.noreply.github.com>
+Date:   Wed Nov 25 02:08:31 2020 +0500
+
+    Выполняет задание
+
+[33mcommit 0908f64835a8974f970977034ed5743149992b3b[m
+Author: TimurDov11 <65161688+TimurDov11@users.noreply.github.com>
+Date:   Tue Nov 24 23:50:07 2020 +0500
+
+    Создаёт модули с функциями для генерации DOM-элементов
+
+[33mcommit 252447ef20c4f358b2ee6e490b7a9793f04c34df[m
+Author: TimurDov11 <65161688+TimurDov11@users.noreply.github.com>
+Date:   Mon Nov 23 22:02:41 2020 +0500
+
+    Описывает функцию для рендеринга (вставки в DOM) компонентов
+
+[33mcommit e4a975472beae4f6bf41a55cee0d57686bac2227[m
+Merge: d469fa9 817e737
+Author: Keks <keksobot@users.noreply.github.com>
+Date:   Mon Nov 23 09:25:13 2020 +0300
+
+    Merge pull request #2 from TimurDov11/module1-task2
+
+[33mcommit 817e737deb250ef0183cb25d7f4019f62d0ef8b3[m[33m ([m[1;31morigin/module1-task2[m[33m, [m[1;32mmodule1-task2[m[33m)[m
+Author: TimurDov11 <65161688+TimurDov11@users.noreply.github.com>
+Date:   Sun Nov 22 18:57:58 2020 +0500
+
+    Выполняет задание
+
+[33mcommit d469fa9879457da23c5b5f8ed752e1444fdaf10c[m
+Merge: 8494129 728c32f
+Author: Keks <keksobot@users.noreply.github.com>
+Date:   Sun Nov 22 10:50:35 2020 +0300
+
+    Merge pull request #1 from TimurDov11/module1-task1
+
+[33mcommit 728c32f33e80920ee42de6b6eb6f5729006d4dd9[m[33m ([m[1;31morigin/module1-task1[m[33m, [m[1;32mmodule1-task1[m[33m)[m
+Author: TimurDov11 <65161688+TimurDov11@users.noreply.github.com>
+Date:   Sat Nov 21 21:56:27 2020 +0500
+
+    Указывает имя наставника
+
+[33mcommit 849412910f29cd10992020eb81aa415ade56d4df[m
+Author: Keks <keks@htmlacademy.ru>
+Date:   Sat Nov 21 16:42:19 2020 +0300
+
+    :hatching_chick:

@@ -82,6 +82,7 @@ export default class Point {
   _onEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
+      this._waypointEditComponent.reset(this._waypoint);
 
       this._replaceFormToEventPoint();
       this._waypointComponent.setEditClickHandler(this._onEventRollupBtnDownClick);

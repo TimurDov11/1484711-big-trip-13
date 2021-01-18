@@ -1,91 +1,105 @@
 import SmartView from "./smart.js";
 import dayjs from "dayjs";
+import {generateDescription, generatePhotos} from "../utils/render.js";
+import flatpickr from "flatpickr";
 
-const createFormEditPointTemplate = (waypoint) => {
-  const {type, destinationPlace, startTime, endTime, price, offers, destinationDescription} = waypoint;
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+
+const createEventOfferTemplate = (offers, isOffers) => {
+  if (isOffers) {
+    return ``;
+  } else {
+    const fragment = [];
+
+    for (let i = 0; i < offers.length; i++) {
+      fragment.push(`<div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage">
+        <label class="event__offer-label" for="event-offer-luggage-1">
+          <span class="event__offer-title">${offers[i].title}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${offers[i].price}</span>
+        </label>
+      </div>`);
+    }
+
+    return fragment.join(``);
+  }
+};
+
+const createEventOfferSectionTemplate = (eventOfferTemplate) => {
+  if (eventOfferTemplate === ``) {
+    return ``;
+  } else {
+    return `<section class="event__section  event__section--offers">
+          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+
+          <div class="event__available-offers">
+            ${eventOfferTemplate}
+          </div>
+        </section>`;
+  }
+};
+
+const createEventDescriptionTemplate = (destinationDescription, isDestinationDescriptionDescription) => {
+  if (isDestinationDescriptionDescription) {
+    return ``;
+  } else {
+    const fragment = [];
+
+    for (let i = 0; i < destinationDescription.description.length; i++) {
+      fragment.push(`${destinationDescription.description[i]}`);
+    }
+
+    return fragment.join(` `);
+  }
+};
+
+const createEventPhotosTemplate = (destinationDescription, isDestinationDescriptionPhotos) => {
+  if (isDestinationDescriptionPhotos) {
+    return ``;
+  } else {
+    const fragment = [];
+
+    for (let i = 0; i < destinationDescription.photos.length; i++) {
+      fragment.push(`<img class="event__photo" src="${destinationDescription.photos[i]}" alt="Event photo">`);
+    }
+
+    return fragment.join(``);
+  }
+};
+
+const createEventDestinationDescriptionSectionTemplate = (eventDescriptionTemplate, eventPhotosTemplate) => {
+  if (eventDescriptionTemplate === ``) {
+    return ``;
+  } else {
+    return `<section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">${eventDescriptionTemplate}</p>
+
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+          ${eventPhotosTemplate}
+        </div>
+      </div>
+    </section>`;
+  }
+};
+
+const createFormEditPointTemplate = (data) => {
+  const {type, destinationPlace, startTime, endTime, price, offers, destinationDescription, isOffers, isDestinationDescriptionDescription, isDestinationDescriptionPhotos} = data;
 
   const startTimeDateTimeHuman = dayjs(startTime).format(`DD/MM/YY HH:mm`);
   const endTimeDateTimeHuman = dayjs(endTime).format(`DD/MM/YY HH:mm`);
 
-  const createEventOfferTemplate = () => {
-    if (offers.length === 0) {
-      return ``;
-    } else {
-      const fragment = [];
+  const eventOfferTemplate = createEventOfferTemplate(offers, isOffers);
 
-      for (let i = 0; i < offers.length; i++) {
-        fragment.push(`<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage">
-          <label class="event__offer-label" for="event-offer-luggage-1">
-            <span class="event__offer-title">${offers[i].title}</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">${offers[i].price}</span>
-          </label>
-        </div>`);
-      }
+  const eventOfferSectionTemplate = createEventOfferSectionTemplate(eventOfferTemplate);
 
-      return fragment.join(``);
-    }
-  };
+  const eventDescriptionTemplate = createEventDescriptionTemplate(destinationDescription, isDestinationDescriptionDescription);
 
-  const createEventOfferSectionTemplate = () => {
-    if (createEventOfferTemplate() === ``) {
-      return ``;
-    } else {
-      return `<section class="event__section  event__section--offers">
-            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+  const eventPhotosTemplate = createEventPhotosTemplate(destinationDescription, isDestinationDescriptionPhotos);
 
-            <div class="event__available-offers">
-              ${createEventOfferTemplate()}
-            </div>
-          </section>`;
-    }
-  };
-
-  const createEventDescriptionTemplate = () => {
-    if (destinationDescription.description.length === 0) {
-      return ``;
-    } else {
-      const fragment = [];
-
-      for (let i = 0; i < destinationDescription.description.length; i++) {
-        fragment.push(`${destinationDescription.description[i]}`);
-      }
-
-      return fragment.join(` `);
-    }
-  };
-
-  const createEventPhotosTemplate = () => {
-    if (destinationDescription.photos.length === 0) {
-      return ``;
-    } else {
-      const fragment = [];
-
-      for (let i = 0; i < destinationDescription.photos.length; i++) {
-        fragment.push(`<img class="event__photo" src="${destinationDescription.photos[i]}" alt="Event photo">`);
-      }
-
-      return fragment.join(``);
-    }
-  };
-
-  const createEventDestinationDescriptionSectionTemplate = () => {
-    if (createEventDescriptionTemplate() === ``) {
-      return ``;
-    } else {
-      return `<section class="event__section  event__section--destination">
-        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${createEventDescriptionTemplate()}</p>
-
-        <div class="event__photos-container">
-          <div class="event__photos-tape">
-            ${createEventPhotosTemplate()}
-          </div>
-        </div>
-      </section>`;
-    }
-  };
+  const eventDestinationDescriptionSectionTemplate = createEventDestinationDescriptionSectionTemplate(eventDescriptionTemplate, eventPhotosTemplate);
 
   return `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
@@ -189,9 +203,9 @@ const createFormEditPointTemplate = (waypoint) => {
           </button>
         </header>
         <section class="event__details">
-          ${createEventOfferSectionTemplate()}
+          ${eventOfferSectionTemplate}
 
-          ${createEventDestinationDescriptionSectionTemplate()}
+          ${eventDestinationDescriptionSectionTemplate}
         </section>
       </form>
     </li>`;
@@ -200,18 +214,134 @@ const createFormEditPointTemplate = (waypoint) => {
 export default class FormEditPoint extends SmartView {
   constructor(waypoint) {
     super();
-    this._waypoint = waypoint;
+    this._data = FormEditPoint.parseWaypointToData(waypoint);
+    this._startDatepicker = null;
+    this._endDatepicker = null;
+
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
+    this._typeToggleHandler = this._typeToggleHandler.bind(this);
+    this._destinationPlaceToggleHandler = this._destinationPlaceToggleHandler.bind(this);
+    this._eventPriceInputHandler = this._eventPriceInputHandler.bind(this);
+    this._startTimeChangeHandler = this._startTimeChangeHandler.bind(this);
+    this._endTimeChangeHandler = this._endTimeChangeHandler.bind(this);
+
+    this._setInnerHandlers();
+    this._setStartDatepicker();
+    this._setEndDatepicker();
+  }
+
+  reset(waypoint) {
+    this.updateData(
+        FormEditPoint.parseWaypointToData(waypoint)
+    );
   }
 
   getTemplate() {
-    return createFormEditPointTemplate(this._waypoint);
+    return createFormEditPointTemplate(this._data);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this._setStartDatepicker();
+    this._setEndDatepicker();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setEditClickHandler(this._callback.editClick);
+  }
+
+  _setStartDatepicker() {
+    if (this._startDatepicker) {
+      this._startDatepicker.destroy();
+      this._startDatepicker = null;
+    }
+
+
+    this._startDatepicker = flatpickr(
+        this.getElement().querySelector(`#event-start-time-1`),
+        {
+          enableTime: true,
+          dateFormat: `d/m/y H:i`,
+          //  time_24hr: true,
+          defaultDate: this._data.startTime,
+          onChange: this._startTimeChangeHandler
+        }
+    );
+  }
+
+  _setEndDatepicker() {
+    if (this._endDatepicker) {
+      this._endDatepicker.destroy();
+      this._endDatepicker = null;
+    }
+
+
+    this._endDatepicker = flatpickr(
+        this.getElement().querySelector(`#event-end-time-1`),
+        {
+          enableTime: true,
+          dateFormat: `d/m/y H:i`,
+          //  time_24hr: true,
+          defaultDate: this._data.endTime,
+          minDate: this._data.startTime,
+          onChange: this._endTimeChangeHandler
+        }
+    );
+  }
+
+  _setInnerHandlers() {
+    this.getElement()
+      .querySelector(`.event__type-group`)
+      .addEventListener(`click`, this._typeToggleHandler);
+    this.getElement()
+      .querySelector(`#event-destination-1`)
+      .addEventListener(`change`, this._destinationPlaceToggleHandler);
+    this.getElement()
+      .querySelector(`.event__input--price`)
+      .addEventListener(`input`, this._eventPriceInputHandler);
+  }
+
+  _typeToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      type: evt.target.innerText
+    });
+  }
+
+  _destinationPlaceToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      destinationPlace: evt.target.value,
+      destinationDescription: {
+        description: generateDescription(),
+        photos: generatePhotos()
+      }
+    });
+  }
+
+  _eventPriceInputHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      price: evt.target.value
+    }, true);
+  }
+
+  _startTimeChangeHandler([userDate]) {
+    this.updateData({
+      startTime: dayjs(userDate).format(`DD/MM/YY HH:mm`)
+      //  startTime: dayjs(userDate).hour(23).minute(59).second(59).toDate()
+      //  dayjs(startTime).format(`DD/MM/YY HH:mm`)
+    }, true);
+  }
+
+  _endTimeChangeHandler([userDate]) {
+    this.updateData({
+      endTime: dayjs(userDate).toDate()
+    }, true);
   }
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit(this._waypoint);
+    this._callback.formSubmit(FormEditPoint.parseDataToWaypoint(this._data));
   }
 
   setFormSubmitHandler(callback) {
@@ -232,5 +362,27 @@ export default class FormEditPoint extends SmartView {
   removeEditClickHandler(callback) {
     this._callback.editClick = callback;
     this.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, this._editClickHandler);
+  }
+
+  static parseWaypointToData(waypoint) {
+    return Object.assign(
+        {},
+        waypoint,
+        {
+          isOffers: waypoint.offers.length === 0,
+          isDestinationDescriptionDescription: waypoint.destinationDescription.description.length === 0,
+          isDestinationDescriptionPhotos: waypoint.destinationDescription.photos.length === 0
+        }
+    );
+  }
+
+  static parseDataToWaypoint(data) {
+    data = Object.assign({}, data);
+
+    delete data.isOffers;
+    delete data.isDestinationDescriptionDescription;
+    delete data.isDestinationDescriptionPhotos;
+
+    return data;
   }
 }
