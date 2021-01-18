@@ -5,27 +5,29 @@ import TripEventsListView from "../view/trip-events-list.js";
 import NoTripEventsItemView from "../view/no-trip-events-item.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {EVENT_COUNT, tripEventsElement} from "../const.js";
-import {updateItem} from "../utils/common.js";
 import PointPresenter from "./Point.js";
 import {sortEventPointDay, sortEventPointPrice, sortEventPointTime} from "../utils/event-point.js";
 import {SortType} from "../const.js";
 
 export default class Trip {
-  constructor(tripContainer, pointsModel) {
+  constructor(tripContainer, waypoints, pointsModel) {
     this._pointsModel = pointsModel;
     this._tripContainer = tripContainer;
     this._pointPresenter = {};
     this._currentSortType = SortType.DEFAULT;
 
-    this._tripInfoComponent = new TripInfoView();
-    this._tripInfoCostComponent = new TripInfoCostView();
+    this._tripInfoComponent = new TripInfoView(waypoints);
+    this._tripInfoCostComponent = new TripInfoCostView(waypoints);
     this._noTripEventsItemComponent = new NoTripEventsItemView();
     this._tripSortComponent = new TripSortView();
     this._tripEventsListComponent = new TripEventsListView();
 
-    this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleViewAction = this._handleViewAction.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+
+    this._pointsModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -35,15 +37,15 @@ export default class Trip {
     this._renderTrip();
   }
 
-  _getTasks() {
+  _getPoints() {
     switch (this._currentSortType) {
       case SortType.TIME:
-        this._pointsModel.getTasks().slice().sort(sortEventPointTime);
+        this._pointsModel.getPoints().slice().sort(sortEventPointTime);
       case SortType.PRICE:
-        this._pointsModel.getTasks().slice().sort(sortEventPointPrice);
+        this._pointsModel.getPoints().slice().sort(sortEventPointPrice);
     }
 
-    return this._pointsModel.getTasks();
+    return this._pointsModel.getPoints();
   }
 
   _handleModeChange() {
@@ -52,13 +54,24 @@ export default class Trip {
       .forEach((presenter) => presenter.resetView());
   }
 
-  _handlePointChange(updatedPoint) {
-    // Здесь будем вызывать обновление модели
-    this._pointPresenter[updatedPoint.id].init(updatedPoint);
+  _handleViewAction(actionType, updateType, update) {
+    console.log(actionType, updateType, update);
+    // Здесь будем вызывать обновление модели.
+    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+    // update - обновленные данные
+  }
+
+  _handleModelEvent(updateType, data) {
+    console.log(updateType, data);
+    // В зависимости от типа изменений решаем, что делать:
+    // - обновить часть списка (например, когда поменялось описание)
+    // - обновить список (например, когда задача ушла в архив)
+    // - обновить всю доску (например, при переключении фильтра)
   }
 
   _renderEventPoint(waypoint) {
-    const pointPresenter = new PointPresenter(this._tripEventsListComponent, this._handlePointChange, this._handleModeChange);
+    const pointPresenter = new PointPresenter(this._tripEventsListComponent, this._handleViewAction, this._handleModeChange);
 
     pointPresenter.init(waypoint);
     this._pointPresenter[waypoint.id] = pointPresenter;
@@ -98,7 +111,7 @@ export default class Trip {
   }
 
   _renderTrip() {
-    if (this._getTasks.length === 0) {
+    if (this._getPoints.length === 0) {
       remove(this._tripInfoComponent);
       remove(this._tripInfoCostComponent);
       this._renderNoEventPoints();

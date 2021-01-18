@@ -1,6 +1,7 @@
 import TripEventsItemView from "../view/trip-events-item.js";
 import FormEditPointView from "../view/form-edit-point.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
+import {UserAction, UpdateType} from "../const.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -107,18 +108,24 @@ export default class Point {
 
   _handleFavoriteClick() {
     this._changeData(
-        Object.assign(
-            {},
-            this._waypoint,
-            {
-              isFavorite: !this._waypoint.isFavorite
-            }
-        )
+      UserAction.EDIT_POINT,
+      UpdateType.MINOR,
+      Object.assign(
+          {},
+          this._waypoint,
+          {
+            isFavorite: !this._waypoint.isFavorite
+          }
+      )
     );
   }
 
   _handleFormSubmit(waypoint) {
-    this._changeData(waypoint);
+    this._changeData(
+        UserAction.EDIT_POINT,
+        UpdateType.MINOR,
+        task
+    );
     this._replaceFormToEventPoint();
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._waypointEditComponent.removeEditClickHandler(this._onEventRollupBtnUpClick);

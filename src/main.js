@@ -9,7 +9,7 @@ import TripPresenter from "./presenter/Trip.js";
 const waypoints = new Array(EVENT_COUNT).fill().map(generateWaypoint);
 
 const pointsModel = new PointsModel();
-pointsModel.setTasks(waypoints);
+pointsModel.setPoints(waypoints);
 
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 
