@@ -21,4 +21,4 @@ render(tripControlsElement, new TripFilterView(), RenderPosition.BEFOREEND);
 
 const tripPresenter = new TripPresenter(tripMainElement, waypoints, pointsModel);
 
-tripPresenter.init(waypoints);
+tripPresenter.init();

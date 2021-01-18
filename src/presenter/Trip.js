@@ -11,14 +11,14 @@ import {sortEventPointDay, sortEventPointPrice, sortEventPointTime} from "../uti
 import {SortType} from "../const.js";
 
 export default class Trip {
-  constructor(tripContainer, tripPoints, pointsModel) {
+  constructor(tripContainer, pointsModel) {
     this._pointsModel = pointsModel;
     this._tripContainer = tripContainer;
     this._pointPresenter = {};
     this._currentSortType = SortType.DEFAULT;
 
-    this._tripInfoComponent = new TripInfoView(tripPoints);
-    this._tripInfoCostComponent = new TripInfoCostView(tripPoints);
+    this._tripInfoComponent = new TripInfoView();
+    this._tripInfoCostComponent = new TripInfoCostView();
     this._noTripEventsItemComponent = new NoTripEventsItemView();
     this._tripSortComponent = new TripSortView();
     this._tripEventsListComponent = new TripEventsListView();
@@ -28,10 +28,7 @@ export default class Trip {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
-  init(tripPoints) {
-    this._tripPoints = tripPoints.slice().sort(sortEventPointDay);
-    this._sourcedTripPoints = tripPoints.slice().sort(sortEventPointDay);
-
+  init() {
     render(this._tripContainer, this._tripInfoComponent, RenderPosition.AFTERBEGIN);
     render(this._tripInfoComponent, this._tripInfoCostComponent, RenderPosition.BEFOREEND);
 
@@ -39,6 +36,13 @@ export default class Trip {
   }
 
   _getTasks() {
+    switch (this._currentSortType) {
+      case SortType.TIME:
+        this._pointsModel.getTasks().slice().sort(sortEventPointTime);
+      case SortType.PRICE:
+        this._pointsModel.getTasks().slice().sort(sortEventPointPrice);
+    }
+
     return this._pointsModel.getTasks();
   }
 
@@ -49,7 +53,7 @@ export default class Trip {
   }
 
   _handlePointChange(updatedPoint) {
-    this._tripPoints = updateItem(this._tripPoints, updatedPoint);
+    // Здесь будем вызывать обновление модели
     this._pointPresenter[updatedPoint.id].init(updatedPoint);
   }
 
@@ -60,27 +64,12 @@ export default class Trip {
     this._pointPresenter[waypoint.id] = pointPresenter;
   }
 
-  _sortEventPoints(sortType) {
-    switch (sortType) {
-      case SortType.TIME:
-        this._tripPoints.sort(sortEventPointTime);
-        break;
-      case SortType.PRICE:
-        this._tripPoints.sort(sortEventPointPrice);
-        break;
-      default:
-        this._tripPoints = this._sourcedTripPoints.slice();
-    }
-
-    this._currentSortType = sortType;
-  }
-
   _handleSortTypeChange(sortType) {
     if (this._currentSortType === sortType) {
       return;
     }
 
-    this._sortEventPoints(sortType);
+    this._currentSortType = sortType;
 
     this._clearEventPoints();
 
@@ -100,10 +89,8 @@ export default class Trip {
     this._pointPresenter = {};
   }
 
-  _renderEventPoints() {
-    for (let i = 0; i < Math.min(this._tripPoints.length, EVENT_COUNT); i++) {
-      this._renderEventPoint(this._tripPoints[i]);
-    }
+  _renderEventPoints(waypoints) {
+    waypoints.forEach((waypoint) => this._renderEventPoint(waypoint));
   }
 
   _renderNoEventPoints() {
@@ -111,7 +98,7 @@ export default class Trip {
   }
 
   _renderTrip() {
-    if (this._tripPoints.length === 0) {
+    if (this._getTasks.length === 0) {
       remove(this._tripInfoComponent);
       remove(this._tripInfoCostComponent);
       this._renderNoEventPoints();
