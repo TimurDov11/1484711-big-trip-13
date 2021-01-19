@@ -124,7 +124,7 @@ export default class Point {
     this._changeData(
         UserAction.EDIT_POINT,
         UpdateType.MINOR,
-        task
+        waypoint
     );
     this._replaceFormToEventPoint();
     document.removeEventListener(`keydown`, this._onEscKeyDown);

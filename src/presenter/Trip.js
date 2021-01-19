@@ -10,14 +10,14 @@ import {sortEventPointDay, sortEventPointPrice, sortEventPointTime} from "../uti
 import {SortType} from "../const.js";
 
 export default class Trip {
-  constructor(tripContainer, waypoints, pointsModel) {
+  constructor(tripContainer, tripPoints, pointsModel) {
     this._pointsModel = pointsModel;
     this._tripContainer = tripContainer;
     this._pointPresenter = {};
     this._currentSortType = SortType.DEFAULT;
 
-    this._tripInfoComponent = new TripInfoView(waypoints);
-    this._tripInfoCostComponent = new TripInfoCostView(waypoints);
+    this._tripInfoComponent = new TripInfoView(tripPoints);
+    this._tripInfoCostComponent = new TripInfoCostView(tripPoints);
     this._noTripEventsItemComponent = new NoTripEventsItemView();
     this._tripSortComponent = new TripSortView();
     this._tripEventsListComponent = new TripEventsListView();
@@ -111,14 +111,14 @@ export default class Trip {
   }
 
   _renderTrip() {
-    if (this._getPoints.length === 0) {
+    if (this._getPoints().length === 0) {
       remove(this._tripInfoComponent);
       remove(this._tripInfoCostComponent);
       this._renderNoEventPoints();
     } else {
       this._renderSort();
       render(tripEventsElement, this._tripEventsListComponent, RenderPosition.BEFOREEND);
-      this._renderEventPoints();
+      this._renderEventPoints(this._getPoints().slice().sort(sortEventPointDay));
     }
   }
 }
