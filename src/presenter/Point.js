@@ -108,15 +108,15 @@ export default class Point {
 
   _handleFavoriteClick() {
     this._changeData(
-      UserAction.EDIT_POINT,
-      UpdateType.MINOR,
-      Object.assign(
-          {},
-          this._waypoint,
-          {
-            isFavorite: !this._waypoint.isFavorite
-          }
-      )
+        UserAction.EDIT_POINT,
+        UpdateType.MINOR,
+        Object.assign(
+            {},
+            this._waypoint,
+            {
+              isFavorite: !this._waypoint.isFavorite
+            }
+        )
     );
   }
 

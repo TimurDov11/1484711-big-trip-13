@@ -4,7 +4,7 @@ import TripSortView from "../view/trip-sort.js";
 import TripEventsListView from "../view/trip-events-list.js";
 import NoTripEventsItemView from "../view/no-trip-events-item.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
-import {EVENT_COUNT, tripEventsElement} from "../const.js";
+import {tripEventsElement} from "../const.js";
 import PointPresenter from "./Point.js";
 import {sortEventPointDay, sortEventPointPrice, sortEventPointTime} from "../utils/event-point.js";
 import {SortType, UpdateType, UserAction} from "../const.js";
@@ -16,10 +16,11 @@ export default class Trip {
     this._pointPresenter = {};
     this._currentSortType = SortType.DEFAULT;
 
+    this._tripSortComponent = null;
+
     this._tripInfoComponent = new TripInfoView(tripPoints);
     this._tripInfoCostComponent = new TripInfoCostView(tripPoints);
     this._noTripEventsItemComponent = new NoTripEventsItemView();
-    this._tripSortComponent = new TripSortView();
     this._tripEventsListComponent = new TripEventsListView();
 
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -40,12 +41,12 @@ export default class Trip {
   _getPoints() {
     switch (this._currentSortType) {
       case SortType.TIME:
-        this._pointsModel.getPoints().slice().sort(sortEventPointTime);
+        return this._pointsModel.getPoints().slice().sort(sortEventPointTime);
       case SortType.PRICE:
-        this._pointsModel.getPoints().slice().sort(sortEventPointPrice);
+        return this._pointsModel.getPoints().slice().sort(sortEventPointPrice);
     }
 
-    return this._pointsModel.getPoints();
+    return this._pointsModel.getPoints().slice().sort(sortEventPointDay);
   }
 
   _handleModeChange() {
@@ -71,14 +72,18 @@ export default class Trip {
   _handleModelEvent(updateType, data) {
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить часть точки маршрута (например, когда поменялась цена)
+        // - обновить часть точки маршрута (например, когда поменялся тип точки или пункт назначения)
         this._pointPresenter[data.id].init(data);
         break;
       case UpdateType.MINOR:
-        // - обновить список (например, когда задача ушла в архив)
+        // - обновить часть маршрута (например, когда изменяется дата начала, конца, цена)
+        this._clearTrip();
+        this._renderTrip();
         break;
       case UpdateType.MAJOR:
-        // - обновить всю доску (например, при переключении фильтра)
+        // - обновить весь маршрут (например, при переключении фильтра)
+        this._clearTrip({resetSortType: true});
+        this._renderTrip();
         break;
     }
   }
@@ -97,15 +102,23 @@ export default class Trip {
 
     this._currentSortType = sortType;
 
-    this._clearEventPoints();
+    //  this._clearEventPoints();
+    this._clearTrip();
 
     render(tripEventsElement, this._tripEventsListComponent, RenderPosition.BEFOREEND);
-    this._renderEventPoints();
+    //  this._renderEventPoints();
+    this._renderTrip();
   }
 
   _renderSort() {
-    render(tripEventsElement, this._tripSortComponent, RenderPosition.BEFOREEND);
+    if (this._tripSortComponent !== null) {
+      this._tripSortComponent = null;
+    }
+
+    this._tripSortComponent = new TripSortView(this._currentSortType);
     this._tripSortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+
+    render(tripEventsElement, this._tripSortComponent, RenderPosition.BEFOREEND);
   }
 
   _clearEventPoints() {
@@ -123,15 +136,34 @@ export default class Trip {
     render(tripEventsElement, this._noTripEventsItemComponent, RenderPosition.BEFOREEND);
   }
 
+  _clearTrip({resetSortType = false} = {}) {
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._pointPresenter = {};
+
+    remove(this._tripSortComponent);
+    remove(this._noTripEventsItemComponent);
+
+    if (resetSortType) {
+      this._currentSortType = SortType.DEFAULT;
+    }
+  }
+
   _renderTrip() {
-    if (this._getPoints().length === 0) {
+    const points = this._getPoints();
+    const pointCount = points.length;
+
+    if (pointCount === 0) {
       remove(this._tripInfoComponent);
       remove(this._tripInfoCostComponent);
       this._renderNoEventPoints();
-    } else {
-      this._renderSort();
-      render(tripEventsElement, this._tripEventsListComponent, RenderPosition.BEFOREEND);
-      this._renderEventPoints(this._getPoints().slice().sort(sortEventPointDay));
+
+      return;
     }
+
+    this._renderSort();
+    render(tripEventsElement, this._tripEventsListComponent, RenderPosition.BEFOREEND);
+    this._renderEventPoints(points.slice());
   }
 }
