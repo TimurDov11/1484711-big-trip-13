@@ -102,7 +102,6 @@ export default class Trip {
 
     this._currentSortType = sortType;
 
-    //  this._clearEventPoints();
     this._clearTrip();
 
     render(tripEventsElement, this._tripEventsListComponent, RenderPosition.BEFOREEND);
@@ -119,13 +118,6 @@ export default class Trip {
     this._tripSortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
 
     render(tripEventsElement, this._tripSortComponent, RenderPosition.BEFOREEND);
-  }
-
-  _clearEventPoints() {
-    Object
-      .values(this._pointPresenter)
-      .forEach((presenter) => presenter.destroy());
-    this._pointPresenter = {};
   }
 
   _renderEventPoints(waypoints) {
