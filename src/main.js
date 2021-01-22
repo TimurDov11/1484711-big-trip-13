@@ -4,12 +4,15 @@ import {generateWaypoint} from "./mock/waypoint.js";
 import {render, RenderPosition} from "./utils/render.js";
 import {EVENT_COUNT, tripMainElement} from "./const.js";
 import PointsModel from "./model/points.js";
+import FilterModel from "./model/filter.js";
 import TripPresenter from "./presenter/Trip.js";
 
 const waypoints = new Array(EVENT_COUNT).fill().map(generateWaypoint);
 
 const pointsModel = new PointsModel();
 pointsModel.setPoints(waypoints);
+
+const filterModel = new FilterModel();
 
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 
