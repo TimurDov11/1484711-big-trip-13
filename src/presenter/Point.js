@@ -1,6 +1,7 @@
 import TripEventsItemView from "../view/trip-events-item.js";
 import FormEditPointView from "../view/form-edit-point.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
+import {isDatesEqual, isPricesEqual} from "../utils/event-point.js";
 import {UserAction, UpdateType} from "../const.js";
 
 const Mode = {
@@ -22,6 +23,7 @@ export default class Point {
     this._onEventRollupBtnUpClick = this._onEventRollupBtnUpClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
@@ -37,6 +39,7 @@ export default class Point {
     this._waypointComponent.setEditClickHandler(this._onEventRollupBtnDownClick);
     this._waypointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._waypointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._waypointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     if (prevWaypointComponent === null || prevWaypointEditComponent === null) {
       render(this._tripEventsListContainer, this._waypointComponent, RenderPosition.BEFOREEND);
@@ -120,15 +123,28 @@ export default class Point {
     );
   }
 
-  _handleFormSubmit(waypoint) {
+  _handleFormSubmit(update) {
+    const isMinorUpdate =
+      !isDatesEqual(this._waypoint.startTime, update.startTime) ||
+      !isDatesEqual(this._waypoint.endTime, update.endTime) ||
+      !isPricesEqual(this._waypoint.price, update.price);
+
     this._changeData(
         UserAction.EDIT_POINT,
-        UpdateType.MINOR,
-        waypoint
+        isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+        update
     );
     this._replaceFormToEventPoint();
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._waypointEditComponent.removeEditClickHandler(this._onEventRollupBtnUpClick);
     this._waypointComponent.setEditClickHandler(this._onEventRollupBtnDownClick);
+  }
+
+  _handleDeleteClick(waypoint) {
+    this._changeData(
+        UserAction.DELETE_POINT,
+        UpdateType.MINOR,
+        waypoint
+    );
   }
 }

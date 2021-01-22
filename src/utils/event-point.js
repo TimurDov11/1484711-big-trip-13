@@ -21,3 +21,11 @@ export const sortEventPointPrice = (pointA, pointB) => {
 
   return 0;
 };
+
+export const isDatesEqual = (dateA, dateB) => {
+  return dayjs(dateA).isSame(dateB, `D`);
+};
+
+export const isPricesEqual = (priceA, priceB) => {
+  return priceA === priceB ? true : false;
+};

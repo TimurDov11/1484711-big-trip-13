@@ -219,6 +219,7 @@ export default class FormEditPoint extends SmartView {
     this._endDatepicker = null;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._typeToggleHandler = this._typeToggleHandler.bind(this);
     this._destinationPlaceToggleHandler = this._destinationPlaceToggleHandler.bind(this);
@@ -229,6 +230,15 @@ export default class FormEditPoint extends SmartView {
     this._setInnerHandlers();
     this._setStartDatepicker();
     this._setEndDatepicker();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
   }
 
   reset(waypoint) {
@@ -247,6 +257,7 @@ export default class FormEditPoint extends SmartView {
     this._setEndDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setEditClickHandler(this._callback.editClick);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   _setStartDatepicker() {
@@ -362,6 +373,16 @@ export default class FormEditPoint extends SmartView {
   removeEditClickHandler(callback) {
     this._callback.editClick = callback;
     this.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, this._editClickHandler);
+  }
+
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(FormEditPoint.parseDataToWaypoint(this._data));
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
   }
 
   static parseWaypointToData(waypoint) {
