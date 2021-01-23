@@ -22,8 +22,13 @@ render(switchTripViewElement, new TripMenuView(), RenderPosition.AFTER);
 
 //  render(tripControlsElement, new TripFilterView(filters, `everything`), RenderPosition.BEFOREEND);
 
-const tripPresenter = new TripPresenter(tripMainElement, waypoints, pointsModel);
+const tripPresenter = new TripPresenter(tripMainElement, waypoints, pointsModel, filterModel);
 const filterPresenter = new FilterPresenter(tripControlsElement, filterModel, pointsModel);
 
 filterPresenter.init();
 tripPresenter.init();
+
+document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
+  evt.preventDefault();
+  tripPresenter.createTask();
+});

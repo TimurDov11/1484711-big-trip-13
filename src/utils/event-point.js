@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+dayjs.extend(isSameOrAfter);
 
 export const sortEventPointDay = (pointA, pointB) => {
   return dayjs(pointA.startTime).diff(dayjs(pointB.startTime));
@@ -31,9 +33,9 @@ export const isPricesEqual = (priceA, priceB) => {
 };
 
 export const isPointFuture = (date) => {
-  return dayjs().isSameOrAfter(date, `D`);
+  return dayjs(date).isSameOrAfter(dayjs(), `D`);
 };
 
 export const isPointPast = (date) => {
-  return dayjs().isBefore(date, `D`);
+  return dayjs(date).isBefore(dayjs(), `D`);
 };

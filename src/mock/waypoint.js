@@ -40,8 +40,8 @@ const generateDestinationPlace = () => {
 };
 
 const generateStartTime = () => {
-  const minMinutesGap = 30;
-  const maxMinutesGap = 6000;
+  const minMinutesGap = -6000;
+  const maxMinutesGap = 2000;
 
   const MinutesGap = getRandomInteger(minMinutesGap, maxMinutesGap);
 
@@ -49,8 +49,8 @@ const generateStartTime = () => {
 };
 
 const generateEndTime = () => {
-  const minMinutesGap = 7000;
-  const maxMinutesGap = 16000;
+  const minMinutesGap = 2000;
+  const maxMinutesGap = 3000;
 
   const MinutesGap = getRandomInteger(minMinutesGap, maxMinutesGap);
 
