@@ -29,3 +29,11 @@ export const isDatesEqual = (dateA, dateB) => {
 export const isPricesEqual = (priceA, priceB) => {
   return priceA === priceB ? true : false;
 };
+
+export const isPointFuture = (date) => {
+  return dayjs().isSameOrAfter(date, `D`);
+};
+
+export const isPointPast = (date) => {
+  return dayjs().isBefore(date, `D`);
+};

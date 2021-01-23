@@ -9,6 +9,13 @@ import TripPresenter from "./presenter/Trip.js";
 
 const waypoints = new Array(EVENT_COUNT).fill().map(generateWaypoint);
 
+const filters = [
+  {
+    type: `everything`,
+    name: `Everything`
+  }
+];
+
 const pointsModel = new PointsModel();
 pointsModel.setPoints(waypoints);
 
@@ -20,7 +27,7 @@ const switchTripViewElement = tripControlsElement.querySelector(`h2`);
 
 render(switchTripViewElement, new TripMenuView(), RenderPosition.AFTER);
 
-render(tripControlsElement, new TripFilterView(), RenderPosition.BEFOREEND);
+render(tripControlsElement, new TripFilterView(filters, `everything`), RenderPosition.BEFOREEND);
 
 const tripPresenter = new TripPresenter(tripMainElement, waypoints, pointsModel);
 
