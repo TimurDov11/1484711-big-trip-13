@@ -1,5 +1,5 @@
 import {FilterType} from "../const";
-import {isPointFuture, isPointPast} from "./task";
+import {isPointFuture, isPointPast} from "./event-point";
 
 export const filter = {
   [FilterType.EVERYTHING]: (waypoints) => waypoints,
