@@ -1,5 +1,12 @@
 export const EVENT_COUNT = 20;
 
+export const DESTINATION_PLACES = [
+  `Amsterdam`,
+  `Chamonix`,
+  `Geneva`,
+  `Surgut`
+];
+
 export const pageBodyElement = document.querySelector(`.page-body`);
 
 export const tripMainElement = pageBodyElement.querySelector(`.trip-main`);

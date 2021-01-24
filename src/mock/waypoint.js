@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import {getRandomInteger} from "../utils/common.js";
 import {generateDescription, generatePhotos} from "../utils/render.js";
+import {DESTINATION_PLACES} from "../const.js";
 
 const PRICE_MIN = 1;
 const PRICE_MAX = 200;
@@ -27,13 +28,6 @@ const generateType = () => {
 };
 
 const generateDestinationPlace = () => {
-  const DESTINATION_PLACES = [
-    `Amsterdam`,
-    `Chamonix`,
-    `Geneva`,
-    `Surgut`
-  ];
-
   const randomIndex = getRandomInteger(0, DESTINATION_PLACES.length - 1);
 
   return DESTINATION_PLACES[randomIndex];

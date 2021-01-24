@@ -1,6 +1,7 @@
 import SmartView from "./smart.js";
 import dayjs from "dayjs";
 import {generateDescription, generatePhotos} from "../utils/render.js";
+import {DESTINATION_PLACES} from "../const.js";
 import flatpickr from "flatpickr";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
@@ -38,6 +39,16 @@ const createEventOfferSectionTemplate = (eventOfferTemplate) => {
           </div>
         </section>`;
   }
+};
+
+const createDestinationList = () => {
+  const fragment = [];
+
+  for (let i = 0; i < DESTINATION_PLACES.length; i++) {
+    fragment.push(`<option value="${DESTINATION_PLACES[i]}"></option>`);
+  }
+
+  return fragment.join(``);
 };
 
 const createEventDescriptionTemplate = (destinationDescription, isDestinationDescriptionDescription) => {
@@ -100,6 +111,8 @@ const createFormEditPointTemplate = (data) => {
   const eventPhotosTemplate = createEventPhotosTemplate(destinationDescription, isDestinationDescriptionPhotos);
 
   const eventDestinationDescriptionSectionTemplate = createEventDestinationDescriptionSectionTemplate(eventDescriptionTemplate, eventPhotosTemplate);
+
+  const destinationList = createDestinationList();
 
   return `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
@@ -174,9 +187,7 @@ const createFormEditPointTemplate = (data) => {
             </label>
             <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationPlace}" list="destination-list-1">
             <datalist id="destination-list-1">
-              <option value="Amsterdam"></option>
-              <option value="Geneva"></option>
-              <option value="Chamonix"></option>
+              ${destinationList}
             </datalist>
           </div>
 
@@ -193,7 +204,7 @@ const createFormEditPointTemplate = (data) => {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
+            <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}">
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
