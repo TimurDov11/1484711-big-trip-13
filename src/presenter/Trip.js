@@ -7,8 +7,9 @@ import {render, RenderPosition, remove} from "../utils/render.js";
 import {filter} from "../utils/filter.js";
 import {tripEventsElement} from "../const.js";
 import PointPresenter from "./Point.js";
+import PointNewPresenter from "./Point-new.js";
 import {sortEventPointDay, sortEventPointPrice, sortEventPointTime} from "../utils/event-point.js";
-import {SortType, UpdateType, UserAction} from "../const.js";
+import {SortType, UpdateType, UserAction, FilterType} from "../const.js";
 
 export default class Trip {
   constructor(tripContainer, tripPoints, pointsModel, filterModel) {
@@ -32,6 +33,8 @@ export default class Trip {
 
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+
+    this._pointNewPresenter = new PointNewPresenter(this._tripEventsListComponent, this._handleViewAction);
   }
 
   init() {
@@ -39,6 +42,12 @@ export default class Trip {
     render(this._tripInfoComponent, this._tripInfoCostComponent, RenderPosition.BEFOREEND);
 
     this._renderTrip();
+  }
+
+  createTask() {
+    this._currentSortType = SortType.DEFAULT;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._pointNewPresenter.init();
   }
 
   _getPoints() {
@@ -57,6 +66,7 @@ export default class Trip {
   }
 
   _handleModeChange() {
+    this._pointNewPresenter.destroy();
     Object
       .values(this._pointPresenter)
       .forEach((presenter) => presenter.resetView());
@@ -136,6 +146,7 @@ export default class Trip {
   }
 
   _clearTrip({resetSortType = false} = {}) {
+    this._pointNewPresenter.destroy();
     Object
       .values(this._pointPresenter)
       .forEach((presenter) => presenter.destroy());
