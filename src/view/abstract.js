@@ -25,4 +25,16 @@ export default class Abstract {
   removeElement() {
     this._element = null;
   }
+
+  show() {
+    this._element = this._element.querySelector(`section`).classList.remove(`trip-events--hidden`);
+
+    return this._element;
+  }
+
+  hide() {
+    this._element = this._element.querySelector(`section`).classList.add(`trip-events--hidden`);
+
+    return this._element;
+  }
 }

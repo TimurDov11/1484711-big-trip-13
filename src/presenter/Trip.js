@@ -176,4 +176,12 @@ export default class Trip {
     render(tripEventsElement, this._tripEventsListComponent, RenderPosition.BEFOREEND);
     this._renderEventPoints(points.slice());
   }
+
+  showTrip() {
+    document.querySelector(`.trip-events`).classList.remove(`trip-events--hidden`);
+  }
+
+  hideTrip() {
+    document.querySelector(`.trip-events`).classList.add(`trip-events--hidden`);
+  }
 }
