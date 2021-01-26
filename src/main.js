@@ -21,8 +21,10 @@ const switchTripViewElement = tripControlsElement.querySelector(`h2`);
 
 const tripMenuComponent = new TripMenuView();
 
+const tripStatsComponent = new TripStatsView();
+
 render(switchTripViewElement, tripMenuComponent, RenderPosition.AFTER);
-render(tripEventsElement, new TripStatsView(), RenderPosition.AFTER);
+render(tripEventsElement, tripStatsComponent, RenderPosition.AFTER);
 
 //  render(tripControlsElement, new TripFilterView(filters, `everything`), RenderPosition.BEFOREEND);
 
@@ -33,17 +35,24 @@ const handleTripMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.ADD_NEW_POINT:
       // Скрыть статистику
-      // Показать доску
-      // Показать форму добавления новой задачи
+      tripStatsComponent.hide();
+      // Показать маршрут
+      TripPresenter.showTrip();
+      // Показать форму добавления новой точкимаршрута
+      tripPresenter.createTask();
       // Убрать выделение с ADD NEW POINT после сохранения
       break;
     case MenuItem.TABLE:
-      // Показать доску
+      // Показать маршрут
+      TripPresenter.showTrip();
       // Скрыть статистику
+      tripStatsComponent.hide();
       break;
     case MenuItem.STATS:
-      // Скрыть доску
+      // Скрыть маршрут
+      TripPresenter.hideTrip();
       // Показать статистику
+      tripStatsComponent.show();
       break;
   }
 };

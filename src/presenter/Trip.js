@@ -178,10 +178,15 @@ export default class Trip {
   }
 
   showTrip() {
+    this._currentSortType = SortType.DEFAULT;
+
     document.querySelector(`.trip-events`).classList.remove(`trip-events--hidden`);
+
   }
 
   hideTrip() {
+    this._currentSortType = SortType.DEFAULT;
+
     document.querySelector(`.trip-events`).classList.add(`trip-events--hidden`);
   }
 }
