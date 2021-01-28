@@ -7,8 +7,17 @@ import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import TripPresenter from "./presenter/Trip.js";
 import FilterPresenter from "./presenter/Filter.js";
+import Api from "./api.js";
+
+const AUTHORIZATION = `Basic d37LFxM8Or6hkLayW74`;
+const END_POINT = `https://13.ecmascript.pages.academy/big-trip/`;
 
 const waypoints = new Array(EVENT_COUNT).fill().map(generateWaypoint);
+const api = new Api(END_POINT, AUTHORIZATION);
+
+api.getTasks().then((waypoints) => {
+  console.log(waypoints);
+});
 
 const pointsModel = new PointsModel();
 pointsModel.setPoints(waypoints);
