@@ -7,6 +7,19 @@ export const DESTINATION_PLACES = [
   `Surgut`
 ];
 
+export const TYPES = [
+  `Taxi`,
+  `Bus`,
+  `Train`,
+  `Ship`,
+  `Transport`,
+  `Drive`,
+  `Flight`,
+  `Check-in`,
+  `Sightseeing`,
+  `Restaurant`
+];
+
 export const pageBodyElement = document.querySelector(`.page-body`);
 
 export const tripMainElement = pageBodyElement.querySelector(`.trip-main`);

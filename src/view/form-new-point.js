@@ -1,9 +1,24 @@
 import SmartView from "./smart.js";
 import dayjs from "dayjs";
 import {generateDescription, generatePhotos} from "../utils/render.js";
+import {TYPES} from "../const.js";
 import flatpickr from "flatpickr";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+
+const BLANK_POINT = {
+  type: TYPES[0],
+  destinationPlace: ``,
+  startTime: ``,
+  endTime: ``,
+  price: ``,
+  offers: ``,
+  destinationDescription: {
+    description: generateDescription(),
+    photos: generatePhotos()
+  },
+  isFavorite: false
+};
 
 const createEventOfferTemplate = (offers, isOffers) => {
   if (isOffers) {
@@ -209,7 +224,7 @@ const createFormNewPointTemplate = (data) => {
 };
 
 export default class FormNewPoint extends SmartView {
-  constructor(waypoint) {
+  constructor(waypoint = BLANK_POINT) {
     super();
     this._data = FormNewPoint.parseWaypointToData(waypoint);
     this._startDatepicker = null;
@@ -364,7 +379,7 @@ export default class FormNewPoint extends SmartView {
 
   setEditClickHandler(callback) {
     this._callback.editClick = callback;
-    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
+    //  this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
   }
 
   removeEditClickHandler(callback) {
@@ -387,9 +402,13 @@ export default class FormNewPoint extends SmartView {
         {},
         waypoint,
         {
+          destinationDescription: {
+            description: generateDescription(),
+            photos: generatePhotos()
+          },
           isOffers: waypoint.offers.length === 0,
-          isDestinationDescriptionDescription: waypoint.destinationDescription.description.length === 0,
-          isDestinationDescriptionPhotos: waypoint.destinationDescription.photos.length === 0
+          isDestinationDescriptionDescription: waypoint.destinationDescription.description.length,
+          isDestinationDescriptionPhotos: waypoint.destinationDescription.photos.length
         }
     );
   }

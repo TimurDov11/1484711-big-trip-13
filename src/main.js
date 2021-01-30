@@ -1,5 +1,5 @@
 import TripMenuView from "./view/trip-menu.js";
-import TripStatsView from "./view/trip-stats.js";
+//import TripStatsView from "./view/trip-stats.js";
 import {generateWaypoint} from "./mock/waypoint.js";
 import {render, RenderPosition} from "./utils/render.js";
 import {EVENT_COUNT, tripMainElement, tripEventsElement, MenuItem} from "./const.js";
@@ -15,9 +15,9 @@ const END_POINT = `https://13.ecmascript.pages.academy/big-trip/`;
 const waypoints = new Array(EVENT_COUNT).fill().map(generateWaypoint);
 const api = new Api(END_POINT, AUTHORIZATION);
 
-api.getTasks().then((waypoints) => {
+/*api.getTasks().then((waypoints) => {
   console.log(waypoints);
-});
+});*/
 
 const pointsModel = new PointsModel();
 pointsModel.setPoints(waypoints);
@@ -30,17 +30,17 @@ const switchTripViewElement = tripControlsElement.querySelector(`h2`);
 
 const tripMenuComponent = new TripMenuView();
 
-const tripStatsComponent = new TripStatsView();
+//  const tripStatsComponent = new TripStatsView();
 
 render(switchTripViewElement, tripMenuComponent, RenderPosition.AFTER);
-render(tripEventsElement, tripStatsComponent, RenderPosition.AFTER);
+//  render(tripEventsElement, tripStatsComponent, RenderPosition.AFTER);
 
 //  render(tripControlsElement, new TripFilterView(filters, `everything`), RenderPosition.BEFOREEND);
 
 const tripPresenter = new TripPresenter(tripMainElement, waypoints, pointsModel, filterModel);
 const filterPresenter = new FilterPresenter(tripControlsElement, filterModel, pointsModel);
 
-const handleTripMenuClick = (menuItem) => {
+/*  const handleTripMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.ADD_NEW_POINT:
       // Скрыть статистику
@@ -64,9 +64,9 @@ const handleTripMenuClick = (menuItem) => {
       tripStatsComponent.show();
       break;
   }
-};
+};*/
 
-tripMenuComponent.setMenuClickHandler(handleTripMenuClick);
+//  tripMenuComponent.setMenuClickHandler(handleTripMenuClick);
 
 filterPresenter.init();
 tripPresenter.init();

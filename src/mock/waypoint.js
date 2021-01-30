@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import {getRandomInteger} from "../utils/common.js";
 import {generateDescription, generatePhotos} from "../utils/render.js";
-import {DESTINATION_PLACES} from "../const.js";
+import {DESTINATION_PLACES, TYPES} from "../const.js";
 
 const PRICE_MIN = 1;
 const PRICE_MAX = 200;
@@ -9,19 +9,6 @@ const PRICE_MAX = 200;
 export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 const generateType = () => {
-  const TYPES = [
-    `Taxi`,
-    `Bus`,
-    `Train`,
-    `Ship`,
-    `Transport`,
-    `Drive`,
-    `Flight`,
-    `Check-in`,
-    `Sightseeing`,
-    `Restaurant`
-  ];
-
   const randomIndex = getRandomInteger(0, TYPES.length - 1);
 
   return TYPES[randomIndex];
